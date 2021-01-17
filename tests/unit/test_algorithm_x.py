@@ -17,16 +17,14 @@ class TestAlgorithmX(TestCase):
             [0, 1, 0, 0, 0, 0, 1]
         ])
 
-        result = sorted([sorted(r) for r in algorithm_x(example)])
-        self.assertEqual(result, [[1, 3, 5]])
+        self.assertEqual(algorithm_x(example), [[1, 3, 5]])
 
     def test_no_answer_example(self):
         example = np.array([
             [0, 0, 0, 0, 0, 0, 0],
         ])
 
-        result = sorted([sorted(r) for r in algorithm_x(example)])
-        self.assertEqual(result, [])
+        self.assertEqual(algorithm_x(example), [])
 
     def test_multiple_answer_example(self):
         example = np.array([
@@ -34,8 +32,7 @@ class TestAlgorithmX(TestCase):
             [1, 1]
         ])
 
-        result = sorted([sorted(r) for r in algorithm_x(example)])
-        self.assertEqual(result, [[0], [1]])
+        self.assertEqual(algorithm_x(example), [[0], [1]])
 
 
 class TestCheckSolvable(TestCase):

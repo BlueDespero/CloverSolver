@@ -41,7 +41,7 @@ def algorithm_x(given_matrix):
             elif previous_solution:
                 solution += [element + [objective_row_number] for element in previous_solution]
 
-        return solution
+        return sorted([sorted(s) for s in solution])
 
     return sub_alg(given_matrix, np.arange(given_matrix.shape[0]))
 
