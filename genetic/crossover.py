@@ -1,12 +1,11 @@
 import numpy as np
-from copy import deepcopy
 
 
 def crossover_population(population, fitness, crossover_operator, selection_method, number_of_children):
     children_set = []
     for i in range(0, number_of_children, 2):
-        parent_1 = selection_method(set_o=deepcopy(population), weights=deepcopy(fitness))
-        parent_2 = selection_method(set_o=deepcopy(population), weights=deepcopy(fitness), except_for=[parent_1])
+        parent_1 = selection_method(set_o=np.copy(population), weights=np.copy(fitness))
+        parent_2 = selection_method(set_o=np.copy(population), weights=np.copy(fitness), except_for=[parent_1])
 
         child_1, child_2 = crossover_operator(parent_1, parent_2)
         children_set += [child_1, child_2]
