@@ -18,10 +18,10 @@ class TestSGA(TestCase):
     @data(*itertools.product([linear_fitness, quadratic_fitness], [single_point_crossover, double_point_crossover],
                              [lambda_plus_mu, lambda_coma_mu], [10, 50, 100]))
     @unpack
-    def test_SGA_1(self, fitness_function, crossover_operator, population_merge_function, iterations):
+    def test_SGA_wiki_example(self, fitness_function, crossover_operator, population_merge_function, iterations):
         bug = False
         try:
-            _ = SGA(
+            result, fitness = SGA(
                 initial_population_generation=uniform_initial_population,
                 fitness_function=fitness_function,
                 mutation_operator=reverse_bit_mutation,
@@ -31,7 +31,31 @@ class TestSGA(TestCase):
                 population_merge_function=population_merge_function,
                 iterations=iterations
             )
+            # print("Result: ", result, " | Fitness: ", fitness)
         except:
             bug = True
 
         self.assertFalse(bug)
+'''
+    @data(*itertools.product([linear_fitness, quadratic_fitness], [single_point_crossover, double_point_crossover],
+                             [lambda_plus_mu, lambda_coma_mu], [10, 50, 100]))
+    @unpack
+    def test_SGA_sudoku_example(self, fitness_function, crossover_operator, population_merge_function, iterations):
+        bug = False
+        try:
+            result, fitness = SGA(
+                initial_population_generation=uniform_initial_population,
+                fitness_function=fitness_function,
+                mutation_operator=reverse_bit_mutation,
+                crossover_operator=crossover_operator,
+                sets=get_default_set(),
+                termination_condition=default_termination_condition,
+                population_merge_function=population_merge_function,
+                iterations=iterations
+            )
+            print("Result: ", result, " | Fitness: ", fitness)
+        except:
+            bug = True
+
+        self.assertFalse(bug)
+'''

@@ -45,4 +45,4 @@ def SGA(initial_population_generation,
         if termination_condition(population_fitness):
             break
 
-    return best_solution
+    return best_solution, best_solution_fitness
