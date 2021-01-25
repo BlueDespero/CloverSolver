@@ -1,5 +1,4 @@
 import numpy as np
-from copy import deepcopy
 
 
 def sort_population_by_fitness(population, fitness):
@@ -8,19 +7,19 @@ def sort_population_by_fitness(population, fitness):
 
 
 def roulette_wheel_selection(set_o, weights, except_for=[]):
-    set_c, weights_c = np.reshape(deepcopy(set_o), set_o.shape), np.reshape(deepcopy(weights), weights.shape)
     for e in except_for:
-        del_indexes = np.where(set_c == e)
-        set_c = np.delete(set_c, del_indexes)
-        weights_c = np.delete(weights_c, del_indexes)
+        del_indexes = [i for i, s in enumerate(set_o) if list(s) == list(e)]
+        set_o = np.delete(set_o, del_indexes, axis=0)
+        weights = np.delete(weights, del_indexes)
 
-    w_sum = np.sum(weights_c)
+    w_sum = np.sum(weights)
     border = np.random.uniform(0, w_sum)
     current = 0
-    for i, s in enumerate(set_c):
-        current += weights_c[i]
+    for i, s in enumerate(set_o):
+        current += weights[i]
         if current > border:
             return s
+    return np.random.choice(set_o, 1)[0]
 
 
 def lambda_coma_mu(parents, children):
