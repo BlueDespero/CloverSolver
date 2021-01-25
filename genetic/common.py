@@ -19,7 +19,7 @@ def roulette_wheel_selection(set_o, weights, except_for=[]):
         current += weights[i]
         if current > border:
             return s
-    return np.random.choice(set_o, 1)[0]
+    return except_for[0]
 
 
 def lambda_coma_mu(parents, children):
