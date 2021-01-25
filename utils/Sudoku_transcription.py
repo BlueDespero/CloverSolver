@@ -1,52 +1,6 @@
 import numpy as np
 
 
-def Algorithm_X(Given_matrix):
-    # input:
-    # Given_matrix = np.array([x,y]) containing only ones and zeros
-
-    def Sub_alg(A, d):
-        if A.size == 0:
-            return [-1]
-
-        # Sort columns by number of ones
-        A = (A.T[np.argsort(A.sum(axis=0))]).T
-
-        rows = A[A[:, 0] == 1]
-        objective_row_numbers = d[A[:, 0] == 1]
-
-        if rows.size == 0:
-            return []
-
-        solution = []
-        for i, objective_row_number in zip(range(rows.shape[0]), objective_row_numbers):
-            B = A.copy()
-            d_c = d.copy()
-            for j in np.arange(B.shape[1])[rows[i] == 1][::-1]:
-                # removing each row which intersection with rows[i] is not empty
-                k = B[:, j] == 0
-                B = B[k]
-                d_c = d_c[k]
-                # removing each column that rows[i] covers
-                B = np.delete(B, j, axis=1)
-
-            previous_solution = Sub_alg(B, d_c)
-
-            if previous_solution == [-1]:
-                solution.append([objective_row_number])
-
-            elif previous_solution:
-                solution += [element + [objective_row_number] for element in previous_solution]
-
-        return solution
-
-    # output:
-    # List of lists containing indexes of rows of given matrix,
-    # which are good solution of problem.
-    # If there is no good solution algorythm return empty [[]].
-    return Sub_alg(Given_matrix, np.arange(Given_matrix.shape[0]))
-
-
 def sudoku_matrix_representation(grid):
     # input:
     # grid = np.array([n,n]) full of intigers from range 1 to n
