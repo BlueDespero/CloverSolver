@@ -10,7 +10,7 @@ def mutate_population(popultaion, mutation_operator, mutation_rate):
 
 
 def reverse_bit_mutation(individual):
-    index = np.random.sample(range(individual.shape[0]))
+    index = np.random.choice(range(individual.shape[0]), 1)[0]
     individual[index] ^= 1
 
     return individual
