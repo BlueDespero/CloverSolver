@@ -108,13 +108,8 @@ def sudoku_solution_checker(coordinates,chromosome):
     grid = grid_from_coordinates(chromosome,coordinates)
 
     # check row-number
-    for l in grid:
-        line = sorted(l)
-        if line[0] != 1:
-            return False
-        for i in range(1, size):
-            if line[i - 1] + 1 != line[i]:
-                return False
+    if not check_if_range(grid, size):
+        return False
 
     # check column number
     if not check_if_range(grid.T,size):
