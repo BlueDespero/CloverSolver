@@ -17,7 +17,10 @@ def SGA(initial_population_generation,
         iterations=10000,
         population_size=100,
         number_of_children=50,
-        mutation_rate=0.05
+        mutation_rate=0.05,
+        lookup=False,
+        lookup_every=100,
+        lookup_top=5
         ):
     best_solution, best_solution_fitness = 0, np.inf
 
@@ -25,7 +28,7 @@ def SGA(initial_population_generation,
     population_fitness = get_population_fitness(population=population, sets=sets, function=fitness_function)
     population_fitness, population = sort_population_by_fitness(population=population, fitness=population_fitness)
 
-    for _ in range(iterations):
+    for i in range(iterations):
         children = crossover_population(population=population, fitness=population_fitness,
                                         crossover_operator=crossover_operator,
                                         selection_method=roulette_wheel_selection,
@@ -42,7 +45,20 @@ def SGA(initial_population_generation,
             best_solution_fitness = population_fitness[0]
             best_solution = population[0]
 
+        #TODO: make this log into a function and use logger
+        if lookup and i % lookup_every == 0:
+            print("Iteration {} results".format(i))
+            print("Best solution {s}  |  Best fitness {f}".format(s=best_solution, f=best_solution_fitness))
+            for j in range(1, lookup_top + 1):
+                print("    {iter}: solution {s} | fitness {f}".format(iter=i, s=population[j], f=population_fitness[j]))
+            print("############################")
+
         if termination_condition(population_fitness):
+            print("Iteration {} results".format(i))
+            print("Best solution {s}  |  Best fitness {f}".format(s=best_solution, f=best_solution_fitness))
+            for j in range(1, lookup_top + 1):
+                print("    {iter}: solution {s} | fitness {f}".format(iter=i, s=population[j], f=population_fitness[j]))
+            print("############################")
             break
 
     return best_solution, best_solution_fitness

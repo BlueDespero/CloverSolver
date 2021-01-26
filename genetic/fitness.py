@@ -5,10 +5,14 @@ def get_population_fitness(population, sets, function):
     return np.array([function(get_solution_cover(p, sets)) for p in population])
 
 
+def get_individual_fitness(solution, sets, function):
+    return function(get_solution_cover(solution, sets))
+
+
 def get_solution_cover(individual, sets):
     cover = np.full(shape=sets.shape[1], fill_value=-1)
-    for i in individual:
-        cover += sets[i] * individual[i]
+    for id, i in enumerate(individual):
+        cover += sets[id] * i
     return cover
 
 
