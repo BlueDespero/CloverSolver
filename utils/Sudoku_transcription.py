@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def sudoku_matrix_representation(grid):
     # input:
     # grid = np.array([n,n]) full of intigers from range 1 to n
@@ -32,7 +33,7 @@ def sudoku_matrix_representation(grid):
     for x, y, z in coordinates_and_values:
         for i in range(size):
             if i + 1 != z:
-              indexes_of_rows_to_delete.append([int(x * size * size + y * size + i)])
+                indexes_of_rows_to_delete.append([int(x * size * size + y * size + i)])
 
     coordinates = np.delete(coordinates, indexes_of_rows_to_delete, axis=0)
     Row_column = np.delete(Row_column, indexes_of_rows_to_delete, axis=0)
@@ -70,9 +71,10 @@ def print_sudoku(grid=np.empty([0, 0]), chromosome=None, coordinates=None):
                     np.sqrt(grid.shape[0])) * "-"
             print(s)
     else:
-        print_sudoku(grid=grid_from_coordinates(chromosome,coordinates))
+        print_sudoku(grid=grid_from_coordinates(chromosome, coordinates))
 
-def grid_from_coordinates(chromosome,coordinates):
+
+def grid_from_coordinates(chromosome, coordinates):
     X = []
     Y = []
     Z = []
@@ -87,11 +89,13 @@ def grid_from_coordinates(chromosome,coordinates):
         grid[x, y] = z
     return grid
 
+
 def check_if_range(grid, size):
-    if [l for l in [sorted(g) for g in grid] if l != range(1,size+1)] != []:
+    if [l for l in [sorted(g) for g in grid] if l != range(1, size + 1)] != []:
         return False
 
-def sudoku_solution_checker(coordinates,chromosome):
+
+def sudoku_solution_checker(coordinates, chromosome):
     # input:
     # coordinates = np.array([m,3]) - each row [x,y,z] is
     # a list of coordinates (x,y) and value z
@@ -100,19 +104,19 @@ def sudoku_solution_checker(coordinates,chromosome):
 
     size = np.sqrt(chromosome.shape[0])
 
-    if size%1!=0:
+    if size % 1 != 0:
         return False
 
     size = int(size)
 
-    grid = grid_from_coordinates(chromosome,coordinates)
+    grid = grid_from_coordinates(chromosome, coordinates)
 
     # check row-number
     if not check_if_range(grid, size):
         return False
 
     # check column number
-    if not check_if_range(grid.T,size):
+    if not check_if_range(grid.T, size):
         return False
 
     # check box-number

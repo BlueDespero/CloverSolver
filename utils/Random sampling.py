@@ -1,5 +1,5 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from tqdm.auto import tqdm
 
 
@@ -31,7 +31,6 @@ def Random_search(no_of_iterations, evaluation_matrix, no_of_empty_squares,
     # no_of_empty_squares = number of squares to fill
     # return_best_individual = bool
 
-
     solutions = np.zeros(no_of_iterations)
     sol = np.hstack([np.ones(no_of_empty_squares), np.zeros(evaluation_matrix.shape[0] - no_of_empty_squares)])
 
@@ -62,6 +61,7 @@ def Random_search(no_of_iterations, evaluation_matrix, no_of_empty_squares,
         # solutions = np.array(no_of_iterations) with score of each individual
         return solutions
 
+
 def plot_random_search_solution(no_of_iterations, evaluation_matrix, no_of_empty_squares):
     # input:
     # no_of_iterations = int
@@ -69,9 +69,9 @@ def plot_random_search_solution(no_of_iterations, evaluation_matrix, no_of_empty
     # no_of_empty_squares = int; number of squares to fill
 
     solutions = Random_search(no_of_iterations, evaluation_matrix, no_of_empty_squares)
-    plt.hist(solutions,bins=int(no_of_iterations**(1/3)))
-    plt.title("Random search - "+str(no_of_iterations)+" solutions ditribution")
+    plt.hist(solutions, bins=int(no_of_iterations ** (1 / 3)))
+    plt.title("Random search - " + str(no_of_iterations) + " solutions ditribution")
     plt.show()
-    print("\nBest:",np.min(solutions))
-    print("Mean:",np.mean(solutions))
-    print("Worst:",np.max(solutions))
+    print("\nBest:", np.min(solutions))
+    print("Mean:", np.mean(solutions))
+    print("Worst:", np.max(solutions))
