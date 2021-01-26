@@ -16,7 +16,7 @@ def remove_intersections(sets, sets_ids, selected_rows, id):
 
 
 def algorithm_x(given_matrix):
-    def sub_alg(sets, d):
+    def sub_alg(sets, original_indexes):
         if sets.size == 0:
             return [-1]
 
@@ -24,16 +24,16 @@ def algorithm_x(given_matrix):
         sets = (sets.T[np.argsort(sets.sum(axis=0))]).T
 
         rows = sets[sets[:, 0] == 1]
-        objective_row_numbers = d[sets[:, 0] == 1]
+        objective_row_numbers = original_indexes[sets[:, 0] == 1]
 
         if rows.size == 0:
             return []
 
         solution = []
         for i, objective_row_number in zip(range(rows.shape[0]), objective_row_numbers):
-            sets_c, d_c = remove_intersections(sets, d, rows, i)
+            sets_c, new_indexes = remove_intersections(sets, original_indexes, rows, i)
 
-            previous_solution = sub_alg(sets_c, d_c)
+            previous_solution = sub_alg(sets_c, new_indexes)
 
             if previous_solution == [-1]:
                 solution.append([objective_row_number])
