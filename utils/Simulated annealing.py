@@ -1,6 +1,7 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from tqdm.auto import tqdm
+
 
 def fitness_function(chromosome, evaluation_matrix,
                      model=lambda once, more: more - once):
@@ -20,6 +21,7 @@ def fitness_function(chromosome, evaluation_matrix,
     # output:
     # int/float
     return model(covered_once, covered_more_than_once) + flattened.shape[0]
+
 
 def Simulated_annealing(evaluation_matrix, no_of_empty_squares, no_of_iterations, mutation, alpha=0.1):
     # input:
@@ -81,11 +83,11 @@ def plot_simulated_annealing_solution(no_of_repetitions, no_of_iterations, evalu
 
     solutions = np.zeros(no_of_repetitions)
     for i in tqdm(range(no_of_repetitions)):
-        score, solution = Simulated_annealing(evaluation_matrix, no_of_empty_squares, no_of_iterations, mutation,alpha)
-        solutions[i]=score
-    plt.hist(solutions,bins=int(np.sqrt(no_of_repetitions)))
+        score, solution = Simulated_annealing(evaluation_matrix, no_of_empty_squares, no_of_iterations, mutation, alpha)
+        solutions[i] = score
+    plt.hist(solutions, bins=int(np.sqrt(no_of_repetitions)))
     plt.title("Simulated annealing - " + str(no_of_repetitions) + " solutions ditribution")
     plt.show()
-    print("\nBest:",np.min(solutions))
-    print("Mean:",np.mean(solutions))
-    print("Worst:",np.max(solutions))
+    print("\nBest:", np.min(solutions))
+    print("Mean:", np.mean(solutions))
+    print("Worst:", np.max(solutions))
