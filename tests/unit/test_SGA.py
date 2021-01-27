@@ -9,7 +9,7 @@ from genetic.fitness import linear_fitness, quadratic_fitness
 from genetic.ga_base import SGA
 from genetic.initial_pop import uniform_initial_population
 from genetic.mutation import reverse_bit_mutation
-from tests.test_common import get_default_set, default_termination_condition
+from tests.test_common import get_default_set, default_termination_condition, get_default_sudoku_4x4
 
 
 @ddt
@@ -36,7 +36,7 @@ class TestSGA(TestCase):
             bug = True
 
         self.assertFalse(bug)
-'''
+
     @data(*itertools.product([linear_fitness, quadratic_fitness], [single_point_crossover, double_point_crossover],
                              [lambda_plus_mu, lambda_coma_mu], [10, 50, 100]))
     @unpack
@@ -48,14 +48,13 @@ class TestSGA(TestCase):
                 fitness_function=fitness_function,
                 mutation_operator=reverse_bit_mutation,
                 crossover_operator=crossover_operator,
-                sets=get_default_set(),
+                sets=get_default_sudoku_4x4(),
                 termination_condition=default_termination_condition,
                 population_merge_function=population_merge_function,
                 iterations=iterations
             )
-            print("Result: ", result, " | Fitness: ", fitness)
+            # print("Result: ", result, " | Fitness: ", fitness)
         except:
             bug = True
 
         self.assertFalse(bug)
-'''
