@@ -3,14 +3,14 @@ import matplotlib.pyplot as plt
 from tqdm.auto import tqdm
 
 
-def fittnes_function(chromosome, evaluation_matrix,
+def fitness_function(chromosome, evaluation_matrix,
                      model=lambda once, more: more - once):
     # input:
     # chromosome = 1-D array(n)
     # evaluation_matrix = np.array(n,m) of zeros and ones
     # model = lambda int, int: int; also float type numbers will work well
-    # model - describes dependency of coverd elements and coverd more than once on fittnes function
-    # for default model minimum of fittnes function is always zero
+    # model - describes dependency of covered elements and covered more than once on fitness function
+    # for default model minimum of fitness function is always zero
 
     filter = chromosome.astype(bool)
     solution = evaluation_matrix[filter]
@@ -61,7 +61,7 @@ def Progressive_evolutionary_algorithm(evaluation_matrix, size_of_population, in
 
     for i in tqdm(range(max_iter)):
         for j in range(size_of_population):
-            current_fitness = fittnes_function(population[j], evaluation_matrix)
+            current_fitness = fitness_function(population[j], evaluation_matrix)
             chromosome_fitness_tracking[j, i] = current_fitness
             number_of_ones_tracking[j, i] = np.sum(population[j])
             if current_fitness == 0:

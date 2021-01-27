@@ -1,5 +1,8 @@
 import numpy as np
 
+from utils.algorithm_x import algorithm_x_first_solution, algorithm_x
+
+
 def sudoku_matrix_representation(grid):
     # input:
     # grid = np.array([n,n]) full of intigers from range 1 to n
@@ -32,7 +35,7 @@ def sudoku_matrix_representation(grid):
     for x, y, z in coordinates_and_values:
         for i in range(size):
             if i + 1 != z:
-              indexes_of_rows_to_delete.append([int(x * size * size + y * size + i)])
+                indexes_of_rows_to_delete.append([int(x * size * size + y * size + i)])
 
     coordinates = np.delete(coordinates, indexes_of_rows_to_delete, axis=0)
     Row_column = np.delete(Row_column, indexes_of_rows_to_delete, axis=0)
@@ -70,9 +73,10 @@ def print_sudoku(grid=np.empty([0, 0]), chromosome=None, coordinates=None):
                     np.sqrt(grid.shape[0])) * "-"
             print(s)
     else:
-        print_sudoku(grid=grid_from_coordinates(chromosome,coordinates))
+        print_sudoku(grid=grid_from_coordinates(chromosome, coordinates))
 
-def grid_from_coordinates(chromosome,coordinates):
+
+def grid_from_coordinates(chromosome, coordinates, size_of_grid=None):
     X = []
     Y = []
     Z = []
@@ -81,17 +85,22 @@ def grid_from_coordinates(chromosome,coordinates):
         X.append(x)
         Y.append(y)
         Z.append(z)
-    size = int(np.sqrt(len(X)))
+    if size_of_grid:
+        size = size_of_grid
+    else:
+        size = max(int(np.sqrt(len(X))), max(Z))
     grid = np.zeros([size, size])
     for x, y, z in zip(X, Y, Z):
         grid[x, y] = z
     return grid
 
+
 def check_if_range(grid, size):
-    if [l for l in [sorted(g) for g in grid] if l != range(1,size+1)] != []:
+    if [l for l in [sorted(g) for g in grid] if l != range(1, size + 1)] != []:
         return False
 
-def sudoku_solution_checker(coordinates,chromosome):
+
+def sudoku_solution_checker(coordinates, chromosome):
     # input:
     # coordinates = np.array([m,3]) - each row [x,y,z] is
     # a list of coordinates (x,y) and value z
@@ -100,19 +109,19 @@ def sudoku_solution_checker(coordinates,chromosome):
 
     size = np.sqrt(chromosome.shape[0])
 
-    if size%1!=0:
+    if size % 1 != 0:
         return False
 
     size = int(size)
 
-    grid = grid_from_coordinates(chromosome,coordinates)
+    grid = grid_from_coordinates(chromosome, coordinates)
 
     # check row-number
     if not check_if_range(grid, size):
         return False
 
     # check column number
-    if not check_if_range(grid.T,size):
+    if not check_if_range(grid.T, size):
         return False
 
     # check box-number
@@ -128,3 +137,25 @@ def sudoku_solution_checker(coordinates,chromosome):
         return False
 
     return True
+
+
+def sudoku_generator(size=9):
+    if int(np.sqrt(size)) % 1 != 0:
+        print("Not valid size!")
+        return False
+
+    last_grid = np.zeros([size, size])
+    grid = np.zeros([size, size])
+
+    basic_coordinates, transcription_matrix = sudoku_matrix_representation(last_grid)
+    basic_solution = np.array(algorithm_x_first_solution(transcription_matrix))
+    np.random.shuffle(basic_solution)
+
+    while True:
+        last_grid = grid
+        basic_solution = basic_solution[1:]
+        grid = grid_from_coordinates(basic_solution, basic_coordinates, size_of_grid=size)
+        coordinates, transcription_matrix = sudoku_matrix_representation(grid)
+        if len(algorithm_x(transcription_matrix)) > 1:
+            break
+    return last_grid

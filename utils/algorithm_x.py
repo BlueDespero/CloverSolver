@@ -15,6 +15,35 @@ def remove_intersections(sets, sets_ids, selected_rows, id):
     return sets_c, d_c
 
 
+def algorithm_x_first_solution(given_matrix):
+    order = np.arange(given_matrix.shape[0])
+    np.random.shuffle(order)
+
+    def sub_alg(sets, original_indexes):
+        if sets.size == 0:
+            return [-1]
+
+        rows = sets[sets[:, 0] == 1]
+        objective_row_numbers = original_indexes[sets[:, 0] == 1]
+
+        if rows.size == 0:
+            return []
+
+        for i, objective_row_number in zip(range(rows.shape[0]), objective_row_numbers):
+            sets_c, new_indexes = remove_intersections(sets, original_indexes, rows, i)
+
+            previous_solution = sub_alg(sets_c, new_indexes)
+
+            if previous_solution == [-1]:
+                return [objective_row_number]
+
+            elif previous_solution:
+                return previous_solution + [objective_row_number]
+        return previous_solution
+
+    return sub_alg(given_matrix[order], np.arange(given_matrix.shape[0])[order])
+
+
 def algorithm_x(given_matrix):
     def sub_alg(sets, original_indexes):
         if sets.size == 0:
