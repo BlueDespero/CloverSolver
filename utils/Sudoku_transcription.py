@@ -2,7 +2,6 @@ import numpy as np
 
 from utils.algorithm_x import algorithm_x_first_solution, algorithm_x
 
-
 def sudoku_matrix_representation(grid):
     # input:
     # grid = np.array([n,n]) full of intigers from range 1 to n
@@ -50,7 +49,7 @@ def sudoku_matrix_representation(grid):
     return coordinates, np.hstack([Row_column, Row_number, Column_number, Box_number])
 
 
-def print_sudoku(grid=np.empty([0, 0]), chromosome=None, coordinates=None):
+def print_sudoku(grid=np.empty([0, 0]), chromosome=None, coordinates=None,size_of_grid=None):
     # input optional:
     # 1.
     # grid = np.array([n,n]) full of intigers from 1 to n or 0 representing empty square
@@ -73,7 +72,7 @@ def print_sudoku(grid=np.empty([0, 0]), chromosome=None, coordinates=None):
                     np.sqrt(grid.shape[0])) * "-"
             print(s)
     else:
-        print_sudoku(grid=grid_from_coordinates(chromosome, coordinates))
+        print_sudoku(grid=grid_from_coordinates(chromosome, coordinates,size_of_grid))
 
 
 def grid_from_coordinates(chromosome, coordinates, size_of_grid=None):
