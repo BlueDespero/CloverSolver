@@ -2,26 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from tqdm.auto import tqdm
 
-
-def fitness_function(chromosome, evaluation_matrix,
-                     model=lambda once, more: more - once):
-    # input:
-    # chromosome = 1-D array(n)
-    # evaluation_matrix = np.array(n,m) of zeros and ones
-    # model = lambda int, int: int; also float type numbers will work well
-    # model - describes dependency of covered elements and covered more than once on fitness function
-    # for default model minimum of fitness function is always zero
-
-    filter = chromosome.astype(bool)
-    solution = evaluation_matrix[filter]
-    flattened = solution.sum(axis=0)
-    covered_more_than_once = np.sum(flattened > 1)
-    covered_once = np.sum(flattened == 1)
-
-    # output:
-    # int/float
-    return model(covered_once, covered_more_than_once) + flattened.shape[0]
-
+from utils.Common_functions import fitness_function
 
 def Random_search(no_of_iterations, evaluation_matrix, no_of_empty_squares,
                   return_best_individual=False, tqdm_mode=False):

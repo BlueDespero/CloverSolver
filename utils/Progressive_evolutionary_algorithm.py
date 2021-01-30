@@ -2,43 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tqdm.auto import tqdm
 
-
-def fitness_function(chromosome, evaluation_matrix,
-                     model=lambda once, more: more - once):
-    # input:
-    # chromosome = 1-D array(n)
-    # evaluation_matrix = np.array(n,m) of zeros and ones
-    # model = lambda int, int: int; also float type numbers will work well
-    # model - describes dependency of covered elements and covered more than once on fitness function
-    # for default model minimum of fitness function is always zero
-
-    filter = chromosome.astype(bool)
-    solution = evaluation_matrix[filter]
-    flattened = solution.sum(axis=0)
-    covered_more_than_once = np.sum(flattened > 1)
-    covered_once = np.sum(flattened == 1)
-
-    # output:
-    # int/float
-    return model(covered_once, covered_more_than_once) + flattened.shape[0]
-
-
-def mutation_one(chromosome):
-    # input:
-    # chromosome = 1-D array
-
-    index_of_chosen_one = np.random.choice(np.argwhere(chromosome == 1).flatten())
-    index_of_chosen_zero = np.random.choice(np.argwhere(chromosome == 0).flatten())
-
-    # swap
-    new = chromosome.copy()
-    new[index_of_chosen_one] = 0
-    new[index_of_chosen_zero] = 1
-
-    # output:
-    # new = 1-D array
-    return new
-
+from utils.Common_functions import fitness_function,mutation_one
 
 def Progressive_evolutionary_algorithm(evaluation_matrix, size_of_population, max_iter, tqdm_mode=False):
     # initialization of first generation
