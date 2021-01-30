@@ -13,13 +13,13 @@ def limit_iteration(n, k, number_of_possibilities, P):
     return int(1 / np.log10(1 / (1 - number_of_possibilities[index])) + 1) * P
 
 
-def Extended_progressive_evolutionary_algorithm(evaluation_matrix, size_of_population,
-                                                size_of_sudoku, max_iter=None, P=4, crossover_paramiter=0.5,
+def Extended_progressive_evolutionary_algorithm(transcription_matrix, size_of_population,
+                                                size_of_sudoku, max_iter=None, P=4, crossover_parameter=0.5,
                                                 tqdm_mode=False):
     # initialization of first generation
-    population = np.zeros([size_of_population, evaluation_matrix.shape[0]])
+    population = np.zeros([size_of_population, transcription_matrix.shape[0]])
     for i in range(size_of_population):
-        population[i, np.random.randint(0, evaluation_matrix.shape[0], 1)] = 1
+        population[i, np.random.randint(0, transcription_matrix.shape[0], 1)] = 1
 
     number_of_possibilities = cumulate_data(10, size_of_sudoku, tqdm_mode=tqdm_mode)[-1, :]
     if not max_iter:
@@ -41,7 +41,7 @@ def Extended_progressive_evolutionary_algorithm(evaluation_matrix, size_of_popul
         this_range = range(max_iter)
     for i in this_range:
         for j in range(size_of_population):
-            current_fitness = fitness_function(population[j], evaluation_matrix)
+            current_fitness = fitness_function(population[j], transcription_matrix)
             chromosome_fitness_tracking[j, i] = current_fitness
             number_of_ones_tracking[j, i] = np.sum(population[j])
 
@@ -59,7 +59,7 @@ def Extended_progressive_evolutionary_algorithm(evaluation_matrix, size_of_popul
                 winning_chromosome = population[j].copy()
                 winning_chromosome[int(last_added_subset[j])] = 0
             else:
-                if np.sum(evaluation_matrix[population[j].astype(bool)].sum(axis=0) > 1) == 0:
+                if np.sum(transcription_matrix[population[j].astype(bool)].sum(axis=0) > 1) == 0:
                     last_added_subset[j] = np.random.choice(np.argwhere(population[j] == 0).flatten())
                     population[j, int(last_added_subset[j])] = 1
                 else:
@@ -89,20 +89,19 @@ def Extended_progressive_evolutionary_algorithm(evaluation_matrix, size_of_popul
                 chosen = population[id_of_chosen][0].copy()
                 chosen[int(last_added_subset[id_of_chosen])] = 0
                 bin = binary_list_to_ids(chosen)
-                mask = (np.random.rand(bin.shape[0]) * (1 / (1 - crossover_paramiter))).astype(int).astype(bool)
-                population[j] = ids_to_binary_list(bin[mask], evaluation_matrix.shape[0])
+                mask = (np.random.rand(bin.shape[0]) * (1 / (1 - crossover_parameter))).astype(int).astype(bool)
+                population[j] = ids_to_binary_list(bin[mask], transcription_matrix.shape[0])
 
         if founded:
             return chromosome_fitness_tracking[:, :i + 1], number_of_ones_tracking[:, :i + 1], winning_chromosome
     return chromosome_fitness_tracking, number_of_ones_tracking, winning_chromosome
 
 
-def plot_EPEA_solution(evaluation_matrix, size_of_population,
-                       size_of_sudoku, max_iter=None, P=4, crossover_paramiter=0.5, tqdm_mode=False):
-
+def plot_EPEA_solution(transcription_matrix, size_of_population,
+                       size_of_sudoku, max_iter=None, P=4, crossover_parameter=0.5, tqdm_mode=False):
     chromosome_fitness_tracking, number_of_ones_tracking, winning_chromosome = Extended_progressive_evolutionary_algorithm(
-        evaluation_matrix, size_of_population,
-        size_of_sudoku, max_iter=max_iter, P=P, crossover_paramiter=crossover_paramiter, tqdm_mode=tqdm_mode)
+        transcription_matrix, size_of_population,
+        size_of_sudoku, max_iter=max_iter, P=P, crossover_parameter=crossover_parameter, tqdm_mode=tqdm_mode)
 
     print("Fitness value")
     print("Best:", np.min(chromosome_fitness_tracking))

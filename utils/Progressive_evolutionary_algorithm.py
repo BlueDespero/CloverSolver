@@ -4,10 +4,11 @@ from tqdm.auto import tqdm
 
 from utils.Common_functions import fitness_function
 
-def Progressive_evolutionary_algorithm(evaluation_matrix, size_of_population, max_iter, tqdm_mode=False):
+
+def Progressive_evolutionary_algorithm(transcription_matrix, size_of_population, max_iter, tqdm_mode=False):
     # initialization of first generation
     sol = np.hstack(
-        [np.ones(1), np.zeros(evaluation_matrix.shape[0] - 1)])
+        [np.ones(1), np.zeros(transcription_matrix.shape[0] - 1)])
     sol = sol.astype(int)
     np.random.shuffle(sol)
     population = sol
@@ -30,7 +31,7 @@ def Progressive_evolutionary_algorithm(evaluation_matrix, size_of_population, ma
 
     for i in this_range:
         for j in range(size_of_population):
-            current_fitness = fitness_function(population[j], evaluation_matrix)
+            current_fitness = fitness_function(population[j], transcription_matrix)
             chromosome_fitness_tracking[j, i] = current_fitness
             number_of_ones_tracking[j, i] = np.sum(population[j])
             if current_fitness == 0:
@@ -38,7 +39,7 @@ def Progressive_evolutionary_algorithm(evaluation_matrix, size_of_population, ma
                 founded = True
                 winning_chromosome = population[j]
             else:
-                if np.sum(evaluation_matrix[population[j].astype(bool)].sum(axis=0) > 1) == 0:
+                if np.sum(transcription_matrix[population[j].astype(bool)].sum(axis=0) > 1) == 0:
                     last_added_subset[j] = np.random.choice(np.argwhere(population[j] == 0).flatten())
                     population[j, int(last_added_subset[j])] = 1
                 else:
@@ -58,9 +59,9 @@ def Progressive_evolutionary_algorithm(evaluation_matrix, size_of_population, ma
     return chromosome_fitness_tracking, number_of_ones_tracking, winning_chromosome
 
 
-def plot_PEA_solution(evaluation_matrix, size_of_population, max_iter, tqdm_mode=False):
+def plot_PEA_solution(transcription_matrix, size_of_population, max_iter, tqdm_mode=False):
     chromosome_fitness_tracking, number_of_ones_tracking, winning_chromosome = Progressive_evolutionary_algorithm(
-        evaluation_matrix,
+        transcription_matrix,
         size_of_population,
         max_iter,
         tqdm_mode=tqdm_mode)

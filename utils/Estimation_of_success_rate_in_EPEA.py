@@ -42,7 +42,7 @@ def observe_number_of_possible_rows(numbers_of_rows, transcription_matrix):
     return np.array(number_of_possibilities)
 
 
-def cumulate_data(size_of_sample, size_of_sudoku):
+def cumulate_data(size_of_sample, size_of_sudoku, tqdm_mode=False):
     coordinates, transcription_matrix = sudoku_matrix_representation(np.zeros([size_of_sudoku, size_of_sudoku]))
     solution = np.array(algorithm_x_first_solution(transcription_matrix))
     temp = observe_number_of_possible_rows(solution, transcription_matrix)
@@ -51,7 +51,13 @@ def cumulate_data(size_of_sample, size_of_sudoku):
     for k, value in enumerate(temp):
         current_stage[k] = value / (initial - k)
     number_of_possibilities = current_stage
-    for i in tqdm(range(size_of_sample)):
+
+    if tqdm_mode:
+        this_range = tqdm(range(size_of_sample))
+    else:
+        this_range = range(size_of_sample)
+
+    for i in this_range:
         solution = np.array(algorithm_x_first_solution(transcription_matrix))
         temp = observe_number_of_possible_rows(solution, transcription_matrix)
         initial = temp[0]
@@ -65,17 +71,19 @@ def cumulate_data(size_of_sample, size_of_sudoku):
 
     return number_of_possibilities
 
+
 def distribution_of_final_fails(size):
     sol = []
-    for k in range(size**2):
-        sol.append((size**2-k)/(5/8 * (size**3) - k))
+    for k in range(size ** 2):
+        sol.append((size ** 2 - k) / (5 / 8 * (size ** 3) - k))
     sol = np.array(sol)
-    print(np.prod(1/sol))
-    plt.plot(np.linspace(0,1,size**2),sol)
-    plt.title("Probabiliti of choosing a correct number")
+    print(np.prod(1 / sol))
+    plt.plot(np.linspace(0, 1, size ** 2), sol)
+    plt.title("Probability of choosing a correct number")
     plt.xlabel('Percent of filling a sudoku')
     plt.ylabel('Probability')
     plt.show()
+
 
 def slider_demo(size_of_sample, size_of_sudoku=9):
     number_of_possibilities = cumulate_data(size_of_sample, size_of_sudoku)

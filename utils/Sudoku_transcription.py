@@ -5,7 +5,7 @@ from utils.algorithm_x import algorithm_x_first_solution, algorithm_x
 
 def sudoku_matrix_representation(grid):
     # input:
-    # grid = np.array([n,n]) full of intigers from range 1 to n
+    # grid = np.array([n,n]) full of integers from range 1 to n
     # or zeros representing empty squares
 
     size = grid.shape[0]
@@ -50,10 +50,10 @@ def sudoku_matrix_representation(grid):
     return coordinates, np.hstack([Row_column, Row_number, Column_number, Box_number])
 
 
-def print_sudoku(grid=np.empty([0, 0]), chromosome=None, coordinates=None,size_of_grid=None):
+def print_sudoku(grid=np.empty([0, 0]), chromosome=None, coordinates=None, size_of_grid=None):
     # input optional:
     # 1.
-    # grid = np.array([n,n]) full of intigers from 1 to n or 0 representing empty square
+    # grid = np.array([n,n]) full of integers from 1 to n or 0 representing empty square
     # 2.
     # solution = np.array([n**2]) or list - list of numbers of rows of transcription matrix
     # coordinates = np.array([m,3]) - each row [x,y,z] is list of coordinates (x,y) of value z
@@ -73,9 +73,10 @@ def print_sudoku(grid=np.empty([0, 0]), chromosome=None, coordinates=None,size_o
                     np.sqrt(grid.shape[0])) * "-"
             print(s)
     else:
-        print_sudoku(grid=grid_from_coordinates(chromosome, coordinates,size_of_grid))
+        print_sudoku(grid=grid_from_coordinates(chromosome, coordinates, size_of_grid))
 
-def grid_from_coordinates(chromosome, coordinates):
+
+def grid_from_coordinates(chromosome, coordinates, size_of_grid):
     X = []
     Y = []
     Z = []
@@ -158,3 +159,30 @@ def sudoku_generator(size=9):
         if len(algorithm_x(transcription_matrix)) > 1:
             break
     return last_grid
+
+
+def transcription_matrix_from_partial_solution(chromosome, transcription_matrix):
+    # input:
+    # chromosome = 1-D array, binary, partial solution
+
+    t_matrix = transcription_matrix.copy()
+    original_indexes = np.arange(transcription_matrix.shape[0])
+
+    rows_to_delete = chromosome.copy()
+    while np.sum(rows_to_delete) > 0:
+        for i in range(t_matrix.shape[0]):
+            if rows_to_delete[i] == 1:
+                id = i
+                break
+
+        for j in np.arange(t_matrix.shape[1])[t_matrix[id] == 1][::-1]:
+            # removing each row which intersection with rows[i] is not empty
+            k = t_matrix[:, j] == 0
+            t_matrix = t_matrix[k]
+            rows_to_delete = rows_to_delete[k]
+            original_indexes = original_indexes[k]
+            # removing each column that rows[i] covers
+            t_matrix = np.delete(t_matrix, j, axis=1)
+    # original_indexes = 1-D array of original indexes of rows
+    # t_matrix = 2-D array, new transcription matrix
+    return original_indexes, t_matrix

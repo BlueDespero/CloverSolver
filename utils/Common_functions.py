@@ -1,18 +1,17 @@
 import numpy as np
 
 
-
-def fitness_function(chromosome, evaluation_matrix,
+def fitness_function(chromosome, transcription_matrix,
                      model=lambda once, more: more - once):
     # input:
     # chromosome = 1-D array(n)
-    # evaluation_matrix = np.array(n,m) of zeros and ones
+    # transcription_matrix = np.array(n,m) of zeros and ones
     # model = lambda int, int: int; also float type numbers will work well
     # model - describes dependency of covered elements and covered more than once on fitness function
     # for default model minimum of fitness function is always zero
 
     filter = chromosome.astype(bool)
-    solution = evaluation_matrix[filter]
+    solution = transcription_matrix[filter]
     flattened = solution.sum(axis=0)
     covered_more_than_once = np.sum(flattened > 1)
     covered_once = np.sum(flattened == 1)

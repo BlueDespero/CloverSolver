@@ -1,5 +1,7 @@
 import numpy as np
 
+from utils.Sudoku_transcription import *
+
 
 def remove_intersections(sets, sets_ids, selected_rows, id):
     sets_c = sets.copy()
