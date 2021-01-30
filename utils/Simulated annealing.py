@@ -1,5 +1,5 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from tqdm.auto import tqdm
 
 
@@ -82,6 +82,7 @@ def plot_simulated_annealing_solution(no_of_repetitions, no_of_iterations, evalu
     # alpha = float from 0 to 1; probability of changing solution to worse
 
     solutions = np.zeros(no_of_repetitions)
+    
     if tqdm_mode:
         this_range = tqdm(range(no_of_repetitions))
     else:
@@ -90,6 +91,7 @@ def plot_simulated_annealing_solution(no_of_repetitions, no_of_iterations, evalu
     for i in this_range:
         score, solution = Simulated_annealing(evaluation_matrix, no_of_empty_squares, no_of_iterations, alpha)
         solutions[i] = score
+    
     plt.hist(solutions, bins=int(np.sqrt(no_of_repetitions)))
     plt.title("Simulated annealing - " + str(no_of_repetitions) + " solutions ditribution")
     plt.show()

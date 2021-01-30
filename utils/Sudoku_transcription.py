@@ -2,6 +2,7 @@ import numpy as np
 
 from utils.algorithm_x import algorithm_x_first_solution, algorithm_x
 
+
 def sudoku_matrix_representation(grid):
     # input:
     # grid = np.array([n,n]) full of intigers from range 1 to n
@@ -74,8 +75,7 @@ def print_sudoku(grid=np.empty([0, 0]), chromosome=None, coordinates=None,size_o
     else:
         print_sudoku(grid=grid_from_coordinates(chromosome, coordinates,size_of_grid))
 
-
-def grid_from_coordinates(chromosome, coordinates, size_of_grid=None):
+def grid_from_coordinates(chromosome, coordinates):
     X = []
     Y = []
     Z = []
