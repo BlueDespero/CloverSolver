@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tqdm.auto import tqdm
 
-from utils.Common_functions import fitness_function,mutation_one
+from utils.Common_functions import fitness_function
 
 def Progressive_evolutionary_algorithm(evaluation_matrix, size_of_population, max_iter, tqdm_mode=False):
     # initialization of first generation

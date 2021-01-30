@@ -2,56 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tqdm.auto import tqdm
 
-from utils.Sudoku_transcription import sudoku_matrix_representation
-from utils.algorithm_x import algorithm_x_first_solution, remove_intersections
 from utils.Common_functions import ids_to_binary_list, binary_list_to_ids, fitness_function
-
-def observe_number_of_possible_rows(numbers_of_rows, transcription_matrix):
-    queue = numbers_of_rows.copy()
-    np.random.shuffle(queue)
-
-    t_matrix = transcription_matrix.copy()
-
-    number_of_possibilities = []
-
-    while queue.size > 0:
-        size = t_matrix.shape[0]
-        number_of_possibilities.append(size)
-        chromosome = ids_to_binary_list(queue, size)
-
-        t_matrix, chromosome = remove_intersections(t_matrix, chromosome, t_matrix, queue[0])
-
-        queue = binary_list_to_ids(chromosome)
-
-    return np.array(number_of_possibilities)
-
-
-def cumulate_data(size_of_sample, size_of_sudoku, tqdm_mode=False):
-    coordinates, transcription_matrix = sudoku_matrix_representation(np.zeros([size_of_sudoku, size_of_sudoku]))
-    solution = np.array(algorithm_x_first_solution(transcription_matrix))
-    temp = observe_number_of_possible_rows(solution, transcription_matrix)
-    initial = temp[0]
-    current_stage = np.empty(temp.shape[0])
-    for k, value in enumerate(temp):
-        current_stage[k] = value / (initial - k)
-    number_of_possibilities = current_stage
-    if tqdm_mode:
-        this_range = tqdm(range(size_of_sample))
-    else:
-        this_range = range(size_of_sample)
-    for i in this_range:
-        solution = np.array(algorithm_x_first_solution(transcription_matrix))
-        temp = observe_number_of_possible_rows(solution, transcription_matrix)
-        initial = temp[0]
-        data = np.empty(temp.shape[0])
-        for k, value in enumerate(temp):
-            data[k] = value / (initial - k)
-
-        current_stage += data
-
-        number_of_possibilities = np.vstack([number_of_possibilities, current_stage / (i + 2)])
-
-    return number_of_possibilities
+from utils.Estimation_of_success_rate_in_EPEA import cumulate_data
 
 
 def limit_iteration(n, k, number_of_possibilities, P):
