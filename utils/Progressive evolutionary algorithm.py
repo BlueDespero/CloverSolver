@@ -40,10 +40,10 @@ def mutation_one(chromosome):
     return new
 
 
-def Progressive_evolutionary_algorithm(evaluation_matrix, size_of_population, initial_number_of_subsets, max_iter):
+def Progressive_evolutionary_algorithm(evaluation_matrix, size_of_population, max_iter, tqdm_mode=False):
     # initialization of first generation
     sol = np.hstack(
-        [np.ones(initial_number_of_subsets), np.zeros(evaluation_matrix.shape[0] - initial_number_of_subsets)])
+        [np.ones(1), np.zeros(evaluation_matrix.shape[0] - 1)])
     sol = sol.astype(int)
     np.random.shuffle(sol)
     population = sol
@@ -59,7 +59,12 @@ def Progressive_evolutionary_algorithm(evaluation_matrix, size_of_population, in
     founded = False
     winning_chromosome = np.empty([])
 
-    for i in tqdm(range(max_iter)):
+    if tqdm_mode:
+        this_range = tqdm(range(max_iter))
+    else:
+        this_range = range(max_iter)
+
+    for i in this_range:
         for j in range(size_of_population):
             current_fitness = fitness_function(population[j], evaluation_matrix)
             chromosome_fitness_tracking[j, i] = current_fitness
@@ -89,12 +94,12 @@ def Progressive_evolutionary_algorithm(evaluation_matrix, size_of_population, in
     return chromosome_fitness_tracking, number_of_ones_tracking, winning_chromosome
 
 
-def plot_PEA_solution(evaluation_matrix, size_of_population, initial_number_of_subsets, max_iter):
+def plot_PEA_solution(evaluation_matrix, size_of_population, max_iter, tqdm_mode=False):
     chromosome_fitness_tracking, number_of_ones_tracking, winning_chromosome = Progressive_evolutionary_algorithm(
         evaluation_matrix,
         size_of_population,
-        initial_number_of_subsets,
-        max_iter)
+        max_iter,
+        tqdm_mode=tqdm_mode)
 
     print("Fitness value")
     print("Best:", np.min(chromosome_fitness_tracking.min(axis=1)))

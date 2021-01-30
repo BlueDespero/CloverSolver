@@ -65,6 +65,17 @@ def cumulate_data(size_of_sample, size_of_sudoku):
 
     return number_of_possibilities
 
+def distribution_of_final_fails(size):
+    sol = []
+    for k in range(size**2):
+        sol.append((size**2-k)/(5/8 * (size**3) - k))
+    sol = np.array(sol)
+    print(np.prod(1/sol))
+    plt.plot(np.linspace(0,1,size**2),sol)
+    plt.title("Probabiliti of choosing a correct number")
+    plt.xlabel('Percent of filling a sudoku')
+    plt.ylabel('Probability')
+    plt.show()
 
 def slider_demo(size_of_sample, size_of_sudoku=9):
     number_of_possibilities = cumulate_data(size_of_sample, size_of_sudoku)

@@ -1,11 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm.auto import tqdm
-from time import time
 
-from utils.Sudoku_transcription import sudoku_generator, sudoku_matrix_representation, print_sudoku
+from utils.Sudoku_transcription import sudoku_matrix_representation
 from utils.algorithm_x import algorithm_x_first_solution, remove_intersections
-
 
 def observe_number_of_possible_rows(numbers_of_rows, transcription_matrix):
     queue = numbers_of_rows.copy()
@@ -27,7 +25,7 @@ def observe_number_of_possible_rows(numbers_of_rows, transcription_matrix):
     return np.array(number_of_possibilities)
 
 
-def cumulate_data(size_of_sample, size_of_sudoku):
+def cumulate_data(size_of_sample, size_of_sudoku, tqdm_mode=False):
     coordinates, transcription_matrix = sudoku_matrix_representation(np.zeros([size_of_sudoku, size_of_sudoku]))
     solution = np.array(algorithm_x_first_solution(transcription_matrix))
     temp = observe_number_of_possible_rows(solution, transcription_matrix)
@@ -36,7 +34,11 @@ def cumulate_data(size_of_sample, size_of_sudoku):
     for k, value in enumerate(temp):
         current_stage[k] = value / (initial - k)
     number_of_possibilities = current_stage
-    for i in tqdm(range(size_of_sample)):
+    if tqdm_mode:
+        this_range = tqdm(range(size_of_sample))
+    else:
+        this_range = range(size_of_sample)
+    for i in this_range:
         solution = np.array(algorithm_x_first_solution(transcription_matrix))
         temp = observe_number_of_possible_rows(solution, transcription_matrix)
         initial = temp[0]
@@ -88,23 +90,24 @@ def mutation_one(chromosome):
     return new
 
 
-def limit_iteration(n, k, number_of_possibilities,P):
+def limit_iteration(n, k, number_of_possibilities, P):
     index = int((k / n) * number_of_possibilities.shape[0])
     if index == 0:
-        return 1*P
-    return int(1 / np.log10(1 / (1 - number_of_possibilities[index]))+1)*P
+        return 1 * P
+    return int(1 / np.log10(1 / (1 - number_of_possibilities[index])) + 1) * P
 
 
 def Extended_progressive_evolutionary_algorithm(evaluation_matrix, size_of_population,
-                                                size_of_sudoku, max_iter=None,P=4):
+                                                size_of_sudoku, max_iter=None, P=4, crossover_paramiter=0.5,
+                                                tqdm_mode=False):
     # initialization of first generation
-    population = np.zeros([size_of_population,evaluation_matrix.shape[0]])
+    population = np.zeros([size_of_population, evaluation_matrix.shape[0]])
     for i in range(size_of_population):
-        population[i,np.random.randint(0,evaluation_matrix.shape[0],1)]=1
+        population[i, np.random.randint(0, evaluation_matrix.shape[0], 1)] = 1
 
-    number_of_possibilities = cumulate_data(10, size_of_sudoku)[-1, :]
+    number_of_possibilities = cumulate_data(10, size_of_sudoku, tqdm_mode=tqdm_mode)[-1, :]
     if not max_iter:
-        max_iter = int(np.sum(1 / np.log10(1 / (1 - number_of_possibilities[1:])) + 1))*P + 1
+        max_iter = int(np.sum(1 / np.log10(1 / (1 - number_of_possibilities[1:])) + 1)) * P + 1
 
     chromosome_fitness_tracking = np.zeros([size_of_population, max_iter])
     number_of_ones_tracking = np.zeros([size_of_population, max_iter])
@@ -115,7 +118,12 @@ def Extended_progressive_evolutionary_algorithm(evaluation_matrix, size_of_popul
     winning_chromosome_val = np.inf
     winning_chromosome = np.empty([])
     backward_time_horizon = np.zeros(size_of_population)
-    for i in tqdm(range(max_iter)):
+
+    if tqdm_mode:
+        this_range = tqdm(range(max_iter))
+    else:
+        this_range = range(max_iter)
+    for i in this_range:
         for j in range(size_of_population):
             current_fitness = fitness_function(population[j], evaluation_matrix)
             chromosome_fitness_tracking[j, i] = current_fitness
@@ -153,7 +161,7 @@ def Extended_progressive_evolutionary_algorithm(evaluation_matrix, size_of_popul
 
             # crossover
             if not founded and backward_time_horizon[j] > limit_iteration(population[j].shape[0], np.sum(population[j]),
-                                                                          number_of_possibilities,P=P):
+                                                                          number_of_possibilities, P=P):
                 # roulette selection
                 temp = chromosome_fitness_tracking[:, i - 1] + backward_time_horizon
                 normalization_term = np.sum(np.max(temp) - temp)
@@ -165,7 +173,7 @@ def Extended_progressive_evolutionary_algorithm(evaluation_matrix, size_of_popul
                 chosen = population[id_of_chosen][0].copy()
                 chosen[int(last_added_subset[id_of_chosen])] = 0
                 bin = binary_list_to_ids(chosen)
-                mask = (np.random.rand(bin.shape[0]) * 4).astype(int).astype(bool)
+                mask = (np.random.rand(bin.shape[0]) * (1 / (1 - crossover_paramiter))).astype(int).astype(bool)
                 population[j] = ids_to_binary_list(bin[mask], evaluation_matrix.shape[0])
 
         if founded:
@@ -173,7 +181,13 @@ def Extended_progressive_evolutionary_algorithm(evaluation_matrix, size_of_popul
     return chromosome_fitness_tracking, number_of_ones_tracking, winning_chromosome
 
 
-def plot_EPEA_solution(chromosome_fitness_tracking, number_of_ones_tracking):
+def plot_EPEA_solution(evaluation_matrix, size_of_population,
+                       size_of_sudoku, max_iter=None, P=4, crossover_paramiter=0.5, tqdm_mode=False):
+
+    chromosome_fitness_tracking, number_of_ones_tracking, winning_chromosome = Extended_progressive_evolutionary_algorithm(
+        evaluation_matrix, size_of_population,
+        size_of_sudoku, max_iter=max_iter, P=P, crossover_paramiter=crossover_paramiter, tqdm_mode=tqdm_mode)
+
     print("Fitness value")
     print("Best:", np.min(chromosome_fitness_tracking))
     print("Mean:", np.mean(chromosome_fitness_tracking[:, -1]))

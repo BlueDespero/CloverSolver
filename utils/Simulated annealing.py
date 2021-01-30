@@ -2,13 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tqdm.auto import tqdm
 
+
 def fitness_function(chromosome, evaluation_matrix,
                      model=lambda once, more: more - once):
     # input:
     # chromosome = 1-D array(n)
     # evaluation_matrix = np.array(n,m) of zeros and ones
     # model = lambda int, int: int; also float type numbers will work well
-    # model - describes dependency of coverd elements and coverd more than once on fitness function
+    # model - describes dependency of covered elements and covered more than once on fitness function
     # for default model minimum of fitness function is always zero
 
     filter = chromosome.astype(bool)
@@ -21,7 +22,8 @@ def fitness_function(chromosome, evaluation_matrix,
     # int/float
     return model(covered_once, covered_more_than_once) + flattened.shape[0]
 
-def Simulated_annealing(evaluation_matrix, no_of_empty_squares, no_of_iterations, mutation, alpha=0.1):
+
+def Simulated_annealing(evaluation_matrix, no_of_empty_squares, no_of_iterations, alpha=0.1):
     # input:
     # no_of_iterations = int; number of iterations for each of individual
     # evaluation_matrix = np.array(n,m) matrix of zeros and ones
@@ -36,7 +38,7 @@ def Simulated_annealing(evaluation_matrix, no_of_empty_squares, no_of_iterations
     best_val = x_cost
     best_individual = x
     for t in range(no_of_iterations):
-        y = mutation(x)
+        y = mutation_one(x)
         y_cost = fitness_function(y, evaluation_matrix)
         if (y_cost < x_cost):
             x, x_cost = y, y_cost
@@ -70,7 +72,7 @@ def mutation_one(chromosome):
 
 
 def plot_simulated_annealing_solution(no_of_repetitions, no_of_iterations, evaluation_matrix, no_of_empty_squares,
-                                      mutation, alpha=0.1):
+                                      alpha=0.1, tqdm_mode=False):
     # input:
     # no_of_repetitions = int; number of individuals
     # no_of_iterations = int; number of iterations for each of individual
@@ -80,12 +82,17 @@ def plot_simulated_annealing_solution(no_of_repetitions, no_of_iterations, evalu
     # alpha = float from 0 to 1; probability of changing solution to worse
 
     solutions = np.zeros(no_of_repetitions)
-    for i in tqdm(range(no_of_repetitions)):
-        score, solution = Simulated_annealing(evaluation_matrix, no_of_empty_squares, no_of_iterations, mutation,alpha)
-        solutions[i]=score
-    plt.hist(solutions,bins=int(np.sqrt(no_of_repetitions)))
+    if tqdm_mode:
+        this_range = tqdm(range(no_of_repetitions))
+    else:
+        this_range = range(no_of_repetitions)
+
+    for i in this_range:
+        score, solution = Simulated_annealing(evaluation_matrix, no_of_empty_squares, no_of_iterations, alpha)
+        solutions[i] = score
+    plt.hist(solutions, bins=int(np.sqrt(no_of_repetitions)))
     plt.title("Simulated annealing - " + str(no_of_repetitions) + " solutions ditribution")
     plt.show()
-    print("\nBest:",np.min(solutions))
-    print("Mean:",np.mean(solutions))
-    print("Worst:",np.max(solutions))
+    print("\nBest:", np.min(solutions))
+    print("Mean:", np.mean(solutions))
+    print("Worst:", np.max(solutions))
