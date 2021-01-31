@@ -1,9 +1,9 @@
 import numpy as np
 
 from genetic.common import sort_population_by_fitness, roulette_wheel_selection, sudoku_full_constraints_set, cube
-from genetic.crossover import crossover_population
-from genetic.fitness import get_population_fitness
-from genetic.mutation import mutate_population
+from genetic.plugin_algorithms.crossover import crossover_population
+from genetic.plugin_algorithms.fitness import get_population_fitness
+from genetic.plugin_algorithms.mutation import mutate_population
 
 
 def SGA(initial_population_generation,

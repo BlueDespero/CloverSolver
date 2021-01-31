@@ -4,12 +4,12 @@ from unittest import TestCase
 from ddt import ddt, data, unpack
 
 from genetic.common import lambda_plus_mu, lambda_coma_mu
-from genetic.crossover import single_point_crossover, double_point_crossover, exchange_two_boxes_crossover, \
+from genetic.plugin_algorithms.crossover import single_point_crossover, double_point_crossover, exchange_two_boxes_crossover, \
     exchange_two_columns_crossover, exchange_two_rows_crossover
-from genetic.fitness import linear_fitness, quadratic_fitness
-from genetic.ga_base import SGA
-from genetic.initial_pop import uniform_initial_population
-from genetic.mutation import reverse_bit_mutation, shuffle_row_mutation, shuffle_column_mutation, shuffle_box_mutation
+from genetic.plugin_algorithms.fitness import linear_fitness, quadratic_fitness
+from genetic.plugin_algorithms.ga_base import SGA
+from genetic.plugin_algorithms.initial_pop import uniform_initial_population
+from genetic.plugin_algorithms.mutation import reverse_bit_mutation, shuffle_row_mutation, shuffle_column_mutation, shuffle_box_mutation
 from tests.test_common import default_termination_condition, get_default_sudoku_4x4, get_default_sudoku_9x9
 
 
