@@ -67,8 +67,8 @@ def swap_two_boxes_mutation(individual):
     m_point_two_end = m_point_two_begin + box_size * sudoku_size
 
     for i in range(box_size):
-        individual[m_point_one_begin, m_point_one_end], individual[m_point_two_begin, m_point_two_end] = [
-            individual[m_point_two_begin, m_point_two_end], individual[m_point_one_begin, m_point_one_end]]
+        individual[m_point_one_begin:m_point_one_end], individual[m_point_two_begin:m_point_two_end] = [
+            individual[m_point_two_begin:m_point_two_end], individual[m_point_one_begin:m_point_one_end]]
         m_point_one_begin += row_lenght
         m_point_one_end += row_lenght
         m_point_two_begin += row_lenght
