@@ -3,10 +3,10 @@ import numpy as np
 from genetic.common import sudoku_size_from_solution
 
 
-def mutate_population(popultaion, mutation_operator, mutation_rate):
+def mutate_population(popultaion, mutation_operator, mutation_rate, initial_situation):
     for i, p in enumerate(popultaion):
         if np.random.uniform(0, 1) > mutation_rate:
-            popultaion[i] = mutation_operator(p)
+            popultaion[i] = np.bitwise_or(mutation_operator(p), initial_situation)
 
     return popultaion
 

@@ -1,7 +1,6 @@
 import numpy as np
 
-from genetic.common import roulette_wheel_selection
-from genetic.common import sort_population_by_fitness
+from genetic.common import sort_population_by_fitness, roulette_wheel_selection, sudoku_full_constraints_set, cube
 from genetic.crossover import crossover_population
 from genetic.fitness import get_population_fitness
 from genetic.mutation import mutate_population
@@ -11,7 +10,7 @@ def SGA(initial_population_generation,
         fitness_function,
         mutation_operator,
         crossover_operator,
-        sets,
+        initial_state,
         termination_condition,
         population_merge_function,
         iterations=10000,
@@ -23,21 +22,26 @@ def SGA(initial_population_generation,
         lookup_top=5
         ):
     best_solution, best_solution_fitness = 0, np.inf
+    full_set_of_constraints = sudoku_full_constraints_set(cube(initial_state.shape[0]))
 
-    population = initial_population_generation(population_size, sets.shape[0])
-    population_fitness = get_population_fitness(population=population, sets=sets, function=fitness_function)
+    population = initial_population_generation(population_size, initial_state.shape[0], initial_state)
+    population_fitness = get_population_fitness(population=population, sets=full_set_of_constraints,
+                                                function=fitness_function)
     population_fitness, population = sort_population_by_fitness(population=population, fitness=population_fitness)
 
     for i in range(iterations):
         children = crossover_population(population=population, fitness=population_fitness,
                                         crossover_operator=crossover_operator,
                                         selection_method=roulette_wheel_selection,
-                                        number_of_children=number_of_children)
+                                        number_of_children=number_of_children,
+                                        initial_situation=initial_state)
         children = mutate_population(popultaion=children, mutation_operator=mutation_operator,
-                                     mutation_rate=mutation_rate)
+                                     mutation_rate=mutation_rate,
+                                     initial_situation=initial_state)
 
         population = population_merge_function(population, children)
-        population_fitness = get_population_fitness(population=population, sets=sets, function=fitness_function)
+        population_fitness = get_population_fitness(population=population, sets=full_set_of_constraints,
+                                                    function=fitness_function)
         population_fitness, population = sort_population_by_fitness(population=population, fitness=population_fitness)
         population_fitness, population = population_fitness[:population_size], population[:population_size]
 

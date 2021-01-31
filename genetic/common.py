@@ -40,7 +40,7 @@ def sudoku_size_from_solution(individual):
     return int(cube(individual.shape[0]))
 
 
-def empty_sudoku_matrix_representation(size=9):
+def sudoku_full_constraints_set(size=9):
     Row_column = np.zeros([size ** 3, size ** 2])
     Row_number = np.zeros([size ** 3, size ** 2])
     Column_number = np.zeros([size ** 3, size ** 2])
