@@ -57,7 +57,7 @@ def sudoku_full_constraints_set(size=9):
 
     # output:
     # matrix of constraints
-    return np.hstack([Row_column, Row_number, Column_number, Box_number])
+    return np.hstack([Row_column, Row_number, Column_number, Box_number]).astype(int)
 
 
 def classic_representation_sudoku_into_full_chromosome(sudoku):
