@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from tqdm.auto import tqdm
 
-from utils.Common_functions import fitness_function
+from utils.common import fitness_function
 
 
 def Random_search(no_of_iterations, transcription_matrix, no_of_empty_squares,
