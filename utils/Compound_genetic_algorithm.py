@@ -90,21 +90,28 @@ def Compound_evolutionary_algorithm(transcription_matrix, size_of_population,
 
             # If individual is good enough use on it algorithm x
             if number_of_ones_tracking[j, i] / (size_of_sudoku ** 2) > transforming_factor:
+                # making individual acceptable
                 population[j, int(last_added_subset[j])] = 0
+
+                # Important part:
                 original_indexes, transcription_matrix_new = transcription_matrix_from_partial_solution(population[j],
                                                                                                         transcription_matrix)
                 sol = np.array(algorithm_x_first_solution(transcription_matrix_new))
-
+                # sol is either chromosome solving transcription_matrix_new or empty list
                 if sol.size > 0:
                     founded = True
+                    # convert solution from transcription_matrix_new - smaller matrix - to original transcription_matrix
                     old = np.zeros(transcription_matrix.shape[0])
                     for i, element in enumerate(np.hstack([sol, binary_list_to_ids(population[j])])):
                         if i < sol.shape[0]:
+                            # part of solution from algorithm_x
                             old[i] = original_indexes[element]
                         else:
+                            # part of solution from evolutionary algorithm
                             old[i] = element
                     winning_chromosome = old
                 else:
+                    # This individual has no potential, replace him!
                     population[j] = np.zeros(transcription_matrix.shape[0])
                     population[j, np.random.randint(transcription_matrix.shape[0])] = 1
                     last_added_subset[j] = np.random.randint(transcription_matrix.shape[0])

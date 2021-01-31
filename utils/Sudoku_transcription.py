@@ -164,6 +164,7 @@ def sudoku_generator(size=9):
 def transcription_matrix_from_partial_solution(chromosome, transcription_matrix):
     # input:
     # chromosome = 1-D array, binary, partial solution
+    # transcription_matrix = 2-D array, original transcription matrix
 
     t_matrix = transcription_matrix.copy()
     original_indexes = np.arange(transcription_matrix.shape[0])
@@ -183,6 +184,7 @@ def transcription_matrix_from_partial_solution(chromosome, transcription_matrix)
             original_indexes = original_indexes[k]
             # removing each column that rows[i] covers
             t_matrix = np.delete(t_matrix, j, axis=1)
-    # original_indexes = 1-D array of original indexes of rows
+    # original_indexes = 1-D array of original indexes of rows, needed to convert solution for t_matrix, to solution
+    # for transcription_matrix
     # t_matrix = 2-D array, new transcription matrix
     return original_indexes, t_matrix
