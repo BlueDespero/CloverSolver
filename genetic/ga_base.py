@@ -19,7 +19,7 @@ def SGA(initial_population_generation,
         number_of_children=50,
         mutation_rate=0.05,
         lookup=False,
-        lookup_every=100,
+        lookup_every=0,
         lookup_top=5
         ):
     best_solution, best_solution_fitness = 0, np.inf
@@ -45,8 +45,8 @@ def SGA(initial_population_generation,
             best_solution_fitness = population_fitness[0]
             best_solution = population[0]
 
-        #TODO: make this log into a function and use logger
-        if lookup and i % lookup_every == 0:
+        # TODO: make this log into a function and use logger
+        if lookup and lookup_every != 0 and i % lookup_every == 0:
             print("Iteration {} results".format(i))
             print("Best solution {s}  |  Best fitness {f}".format(s=best_solution, f=best_solution_fitness))
             for j in range(1, lookup_top + 1):
@@ -54,11 +54,13 @@ def SGA(initial_population_generation,
             print("############################")
 
         if termination_condition(population_fitness):
-            print("Iteration {} results".format(i))
-            print("Best solution {s}  |  Best fitness {f}".format(s=best_solution, f=best_solution_fitness))
-            for j in range(1, lookup_top + 1):
-                print("    {iter}: solution {s} | fitness {f}".format(iter=i, s=population[j], f=population_fitness[j]))
-            print("############################")
             break
+
+    if lookup:
+        print("Iteration {} results".format(i))
+        print("Best solution {s}  |  Best fitness {f}".format(s=best_solution, f=best_solution_fitness))
+        for j in range(1, lookup_top + 1):
+            print("    {iter}: solution {s} | fitness {f}".format(iter=i, s=population[j], f=population_fitness[j]))
+        print("############################")
 
     return best_solution, best_solution_fitness
