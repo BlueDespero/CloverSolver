@@ -38,3 +38,32 @@ def cube(x):
 
 def sudoku_size_from_solution(individual):
     return int(cube(individual.shape[0]))
+
+
+def empty_sudoku_matrix_representation(size=9):
+    Row_column = np.zeros([size ** 3, size ** 2])
+    Row_number = np.zeros([size ** 3, size ** 2])
+    Column_number = np.zeros([size ** 3, size ** 2])
+    Box_number = np.zeros([size ** 3, size ** 2])
+
+    for x in range(size):
+        for y in range(size):
+            for z in range(1, size + 1):
+                Box_number[x * size * size + y * size + z - 1, int(
+                    int(x / np.sqrt(size)) + int(y / np.sqrt(size)) * np.sqrt(size)) * size + z - 1] = 1
+                Row_column[x * size * size + y * size + z - 1, x * size + y] = 1
+                Row_number[x * size * size + y * size + z - 1, x * size + z - 1] = 1
+                Column_number[x * size * size + y * size + z - 1, y * size + z - 1] = 1
+
+    # output:
+    # matrix of constraints
+    return np.hstack([Row_column, Row_number, Column_number, Box_number])
+
+
+def classic_representation_sudoku_into_full_chromosome(sudoku):
+    chromosome = np.zeros(sudoku.shape[0] ** 3)
+    for i, value in enumerate(sudoku.flatten()):
+        if value != 0:
+            index = int((i * sudoku.shape[0]) + (value - 1))
+            chromosome[index] = 1
+    return chromosome
