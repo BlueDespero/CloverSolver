@@ -28,3 +28,13 @@ def lambda_coma_mu(parents, children):
 
 def lambda_plus_mu(parents, children):
     return np.concatenate((parents, children))
+
+
+def cube(x):
+    if 0 <= x:
+        return x ** (1. / 3.)
+    return -(-x) ** (1. / 3.)
+
+
+def sudoku_size_from_solution(individual):
+    return int(cube(individual.shape[0]))
