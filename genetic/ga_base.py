@@ -22,7 +22,7 @@ def SGA(initial_population_generation,
         lookup_top=5
         ):
     best_solution, best_solution_fitness = 0, np.inf
-    full_set_of_constraints = sudoku_full_constraints_set(cube(initial_state.shape[0]))
+    full_set_of_constraints = sudoku_full_constraints_set(round(cube(initial_state.shape[0])))
 
     population = initial_population_generation(population_size, initial_state.shape[0], initial_state)
     population_fitness = get_population_fitness(population=population, sets=full_set_of_constraints,
