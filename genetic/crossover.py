@@ -3,7 +3,8 @@ import numpy as np
 from genetic.common import sudoku_size_from_solution
 
 
-def crossover_population(population, fitness, crossover_operator, selection_method, number_of_children,  initial_situation):
+def crossover_population(population, fitness, crossover_operator, selection_method, number_of_children,
+                         initial_situation):
     children_set = []
     for i in range(0, number_of_children, 2):
         parent_1 = selection_method(set_o=np.copy(population), weights=np.copy(fitness))

@@ -1,12 +1,12 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from tqdm.auto import tqdm
 
-from utils.common import ids_to_binary_list, binary_list_to_ids, fitness_function
 from utils.Estimation_of_success_rate_in_EPEA import cumulate_data
-from utils.algorithm_x import algorithm_x_first_solution
-from utils.Sudoku_transcription import transcription_matrix_from_partial_solution
 from utils.Extended_progressive_evolutionary_algorithm import limit_iteration
+from utils.Sudoku_transcription import transcription_matrix_from_partial_solution
+from utils.algorithm_x import algorithm_x_first_solution
+from utils.common import ids_to_binary_list, binary_list_to_ids, fitness_function
 
 
 def Compound_evolutionary_algorithm(transcription_matrix, size_of_population,

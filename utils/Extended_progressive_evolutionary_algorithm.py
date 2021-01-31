@@ -1,9 +1,9 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from tqdm.auto import tqdm
 
-from utils.common import ids_to_binary_list, binary_list_to_ids, fitness_function
 from utils.Estimation_of_success_rate_in_EPEA import cumulate_data
+from utils.common import ids_to_binary_list, binary_list_to_ids, fitness_function
 
 
 def limit_iteration(n, k, number_of_possibilities, P):
