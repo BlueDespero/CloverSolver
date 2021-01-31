@@ -74,7 +74,7 @@ def exchange_two_boxes_crossover(parent_1, parent_2):
     row_lenght = sudoku_size ** 2
 
     box_to_exchange = np.random.choice(range(sudoku_size), 1)[0]
-    box_size = np.sqrt(sudoku_size)
+    box_size = int(np.sqrt(sudoku_size))
 
     crossover_begin = row_lenght * (box_to_exchange // box_size) + sudoku_size * (box_to_exchange % box_size)
     crossover_end = crossover_begin + box_size * sudoku_size

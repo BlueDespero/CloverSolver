@@ -58,7 +58,7 @@ def swap_two_columns_mutation(individual):
 def swap_two_boxes_mutation(individual):
     sudoku_size = sudoku_size_from_solution(individual)
     row_lenght = sudoku_size ** 2
-    box_size = np.sqrt(sudoku_size)
+    box_size = int(np.sqrt(sudoku_size))
     box_one_to_swap, box_two_to_swap = np.random.choice(range(sudoku_size), 2)
 
     m_point_one_begin = row_lenght * (box_one_to_swap // box_size) + sudoku_size * (box_one_to_swap % box_size)
