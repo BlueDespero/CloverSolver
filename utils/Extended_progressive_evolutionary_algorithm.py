@@ -93,8 +93,9 @@ def Extended_progressive_evolutionary_algorithm(transcription_matrix, size_of_po
                 population[j] = ids_to_binary_list(bin[mask], transcription_matrix.shape[0])
 
         if founded:
-            return chromosome_fitness_tracking[:, :i + 1], number_of_ones_tracking[:, :i + 1], winning_chromosome
-    return chromosome_fitness_tracking, number_of_ones_tracking, winning_chromosome
+            return chromosome_fitness_tracking[:, :i + 1].astype(int), number_of_ones_tracking[:, :i + 1].astype(
+                int), winning_chromosome.astype(int)
+    return chromosome_fitness_tracking.astype(int), number_of_ones_tracking.astype(int), winning_chromosome.astype(int)
 
 
 def plot_EPEA_solution(transcription_matrix, size_of_population,
