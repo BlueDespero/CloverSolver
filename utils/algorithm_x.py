@@ -20,7 +20,7 @@ def algorithm_x_first_solution(given_matrix):
     np.random.shuffle(order)
 
     def sub_alg(sets, original_indexes):
-        if sets.shape==(0,0):
+        if sets.shape == (0, 0):
             return [-1]
 
         rows = sets[sets[:, 0] == 1]

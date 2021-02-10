@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from tqdm.auto import tqdm
 
-from utils.Common_functions import fitness_function, mutation_one
+from utils.common import fitness_function, mutation_one
 
 
 def Simulated_annealing(transcription_matrix, no_of_empty_squares, no_of_iterations, alpha=0.1):

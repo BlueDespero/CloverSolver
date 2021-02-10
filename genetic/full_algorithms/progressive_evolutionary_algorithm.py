@@ -1,8 +1,8 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from tqdm.auto import tqdm
 
-from utils.Common_functions import fitness_function
+from utils.common import fitness_function
 
 
 def Progressive_evolutionary_algorithm(transcription_matrix, size_of_population, max_iter, tqdm_mode=False):
