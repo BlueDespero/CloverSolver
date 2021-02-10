@@ -1,2 +1,0 @@
-LOG_DIR_PATH = ""
-TEST_INPUTS_PATH = ""
