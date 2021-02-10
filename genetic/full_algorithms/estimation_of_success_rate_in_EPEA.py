@@ -1,9 +1,9 @@
-import numpy as np
 import matplotlib.pyplot as plt
-from tqdm.auto import tqdm
+import numpy as np
 from matplotlib.widgets import Slider, Button
+from tqdm.auto import tqdm
 
-from utils.Sudoku_transcription import sudoku_matrix_representation
+from utils.sudoku_transcription import sudoku_matrix_representation
 from utils.algorithm_x import remove_intersections, algorithm_x_first_solution
 
 
