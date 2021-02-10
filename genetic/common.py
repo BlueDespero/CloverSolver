@@ -72,7 +72,7 @@ def classic_representation_sudoku_into_full_chromosome(sudoku):
         if value != 0:
             index = int((i * sudoku.shape[0]) + (value - 1))
             chromosome[index] = 1
-    return chromosome
+    return chromosome.astype(int)
 
 # TODO create logging
 '''

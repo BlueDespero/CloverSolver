@@ -22,6 +22,10 @@ def SGA(initial_population_generation,
         lookup_top=5
         ):
     best_solution, best_solution_fitness = 0, np.inf
+
+    fitness_record = []
+    distance_record = []
+
     full_set_of_constraints = sudoku_full_constraints_set(round(cube(initial_state.shape[0])))
 
     population = initial_population_generation(population_size, initial_state.shape[0], initial_state)
@@ -45,6 +49,10 @@ def SGA(initial_population_generation,
         population_fitness, population = sort_population_by_fitness(population=population, fitness=population_fitness)
         population_fitness, population = population_fitness[:population_size], population[:population_size]
 
+        fitness_for_the_record = np.copy(population_fitness)
+        fitness_record.append(
+            [np.max(fitness_for_the_record), np.min(fitness_for_the_record), np.mean(fitness_for_the_record)])
+
         if best_solution_fitness > population_fitness[0]:
             best_solution_fitness = population_fitness[0]
             best_solution = population[0]
@@ -67,4 +75,4 @@ def SGA(initial_population_generation,
             print("    {iter}: solution {s} | fitness {f}".format(iter=i, s=population[j], f=population_fitness[j]))
         print("############################")
 
-    return best_solution, best_solution_fitness
+    return best_solution, best_solution_fitness, fitness_record

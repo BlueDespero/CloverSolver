@@ -22,7 +22,7 @@ class TestSGA_Basic(TestCase):
     def test_SGA_sudoku_4x4_basic(self, fitness_function, crossover_operator, population_merge_function, iterations):
         bug = False
         try:
-            result, fitness = SGA(
+            result, fitness, _ = SGA(
                 initial_population_generation=uniform_initial_population,
                 fitness_function=fitness_function,
                 mutation_operator=reverse_bit_mutation,
@@ -43,7 +43,7 @@ class TestSGA_Basic(TestCase):
     def test_SGA_sudoku_9x9_basic(self, fitness_function, crossover_operator, population_merge_function, iterations):
         bug = False
         try:
-            result, fitness = SGA(
+            result, fitness, _ = SGA(
                 initial_population_generation=uniform_initial_population,
                 fitness_function=fitness_function,
                 mutation_operator=reverse_bit_mutation,
@@ -72,7 +72,7 @@ class TestSGA_PhenotypeCrossoverMutation(TestCase):
                                       population_merge_function, iterations):
         bug = False
         try:
-            result, fitness = SGA(
+            result, fitness, _ = SGA(
                 initial_population_generation=uniform_initial_population,
                 fitness_function=fitness_function,
                 mutation_operator=mutation_operator,
@@ -98,7 +98,7 @@ class TestSGA_PhenotypeCrossoverMutation(TestCase):
                                       population_merge_function, iterations):
         bug = False
         try:
-            result, fitness = SGA(
+            result, fitness, _ = SGA(
                 initial_population_generation=uniform_initial_population,
                 fitness_function=fitness_function,
                 mutation_operator=mutation_operator,

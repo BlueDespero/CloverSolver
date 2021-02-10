@@ -13,15 +13,16 @@ def generate_inputs(name, path, num_cases, size=9, unique=True):
     while len(generated_cases) < num_cases:
         case = sudoku_generator(size)
         case = classic_representation_sudoku_into_full_chromosome(case)
-        if case not in generated_cases or not unique:
-            generated_cases.append(case)
+        # TODO add unique filtering
+        generated_cases.append(case)
 
     pickle.dump(generated_cases, open(os.path.join(path, name), "wb"))
 
 
 if __name__ == '__main__':
     # Parse params
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        epilog="Example use: python3.6 generate_test_inputs.py -n test_cases_9_3.pickle -c 3 -p 'tests/test_effectiveness/test_inputs/'")
     parser.add_argument('-n', '--name', required=True, help="Name of the file where test cases will be saved")
     parser.add_argument('-c', '--count', required=True, type=int, help="How many cases should be generated")
     parser.add_argument('-p', '--path', required=True,
