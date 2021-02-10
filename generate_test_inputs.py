@@ -11,7 +11,7 @@ def generate_inputs(name, path, num_cases, size=9, unique=True,sudoku_generating
 
     generated_cases = []
     while len(generated_cases) < num_cases:
-        case = sudoku_generator(size)
+        case = sudoku_generating_method(size)
         case = classic_representation_sudoku_into_full_chromosome(case)
         # TODO add unique filtering
         generated_cases.append(case)
