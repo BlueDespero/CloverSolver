@@ -127,6 +127,8 @@ def plot_SGA(paths):
             colColours=["palegreen"] * 1,
             cellLoc='center',
             loc='upper right')
+        print(d.keys())
+        break
 
         plt.show()
 
