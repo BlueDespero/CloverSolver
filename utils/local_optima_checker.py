@@ -4,9 +4,9 @@ from tqdm.auto import tqdm
 from scipy.special import binom
 from time import time
 
-from utils.Sudoku_transcription import *
+from utils.sudoku_transcription import *
 from utils.algorithm_x import remove_intersections
-from utils.Common_functions import *
+from utils.common import *
 
 
 def increment(chromosome, max_val):
@@ -80,3 +80,45 @@ def Local_optima_estimator2(transcription_matrix):
 
 def fill_chromosome(partial_solution, length_of_chromosome):
     return np.array([int(bit) for bit in partial_solution + "0" * (length_of_chromosome - len(partial_solution))])
+
+
+def local_minima_counter(given_matrix):
+    order = np.arange(given_matrix.shape[0])
+    np.random.shuffle(order)
+
+    def sub_alg(sets, original_indexes, depth):
+        if sets.size == 0:
+            return [-1]
+
+        # Sort columns by number of ones
+        # sets = (sets.T[np.argsort(sets.sum(axis=0))]).T
+
+        rows = sets[sets[:, 0] == 1]
+        objective_row_numbers = original_indexes[sets[:, 0] == 1]
+
+        if rows.size == 0:
+            return [-1]
+
+        solution = []
+        for i, objective_row_number in zip(range(rows.shape[0]), objective_row_numbers):
+
+            sets_c, new_indexes = remove_intersections(sets, original_indexes, rows, i)
+
+            previous_solution = sub_alg(sets_c, new_indexes, depth + 1)
+
+            if previous_solution == [-1]:
+                solution.append([objective_row_number])
+
+            else:
+                solution += [element + [objective_row_number] for element in previous_solution]
+
+        return solution
+
+    l = sub_alg(given_matrix[order], np.arange(given_matrix.shape[0])[order], 0)
+    return l
+
+
+def solution_tree(tree_matrix, coordinates):
+    # TODO Sudoku solving can be represented as a decision tree, which shows difficulty level of its - this function
+    #  will do this.
+    return None

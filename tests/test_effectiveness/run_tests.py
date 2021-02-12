@@ -1,6 +1,7 @@
 import itertools
 import os
 import pickle
+import numpy as np
 
 from tqdm import tqdm
 
@@ -43,6 +44,7 @@ def runsingle(algorithm,
     )
 
     raport = dict(
+        algorithm=algorithm.__name__,
         initial_population_generation=initial_population_generation.__name__,
         fitness_function=fitness_function.__name__,
         mutation_operator=mutation_operator.__name__,
@@ -63,20 +65,20 @@ def runsingle(algorithm,
 
 
 def runbatch():
-    path_to_tests = "test_inputs"
-    test_names = ["test_cases_9_100.pickle"]  # You can add multiple file names - all their test cases will be loaded
+    path_to_tests = r"C:\Users\user\PycharmProjects\CloverSolver\tests\test_effectiveness"
+    test_names = ["test_inputs30_4x4"]  # You can add multiple file names - all their test cases will be loaded
 
     algorithm = [SGA]
     initial_population_generation = [uniform_initial_population]
     fitness_function = [quadratic_fitness]
     mutation_operator = [shuffle_column_mutation]
-    mutation_rate = [0.3, 0.5]
+    mutation_rate = [0.2, 0.3, 0.4, 0.5, 0.6]
     crossover_operator = [exchange_two_rows_crossover]
     termination_condition = [default_termination_condition]
     population_merge_function = [lambda_plus_mu]
-    iterations = range(2, 4)
-    population_size = range(10, 20, 10)
-    number_of_children = range(10, 20, 10)
+    iterations = [75, 150]
+    population_size = [100, 200]
+    number_of_children = [25, 50, 75]
 
     initial_state = []
 
@@ -88,9 +90,9 @@ def runbatch():
                                   mutation_rate, crossover_operator, initial_state, termination_condition,
                                   population_merge_function, iterations, population_size, number_of_children)
 
-    save_raport_path = "results"
+    save_raport_path = r"C:\Users\user\PycharmProjects\CloverSolver\tests\test_effectiveness"
     raport_name = "raport_"
-    raport_batch_max_size = 100
+    raport_batch_max_size = 500
     raport_iter = 0
     raport_batch = []
 
@@ -98,11 +100,14 @@ def runbatch():
         raport = runsingle(*test)
         raport_batch.append(raport)
         if len(raport_batch) >= raport_batch_max_size:
-            save_raport(save_path=save_raport_path, raport=raport_batch, name=raport_name + raport_iter)
+            save_raport(save_path=save_raport_path, raport=raport_batch,
+                        name=raport_name + str(np.random.randint(0, 10 ** 7)) + ".pickle")
             raport_iter += 1
             raport_batch = []
-
-    save_raport(save_path=save_raport_path, raport=raport_batch, name=raport_name + str(raport_iter) + ".pickle")
+    # Method with raport_iter doesn't work well, when I run this code twice with different parameters it overwrites file
+    # Mine method in long therm will also cause problems, but for 10, 30, even 100 it should work well.
+    save_raport(save_path=save_raport_path, raport=raport_batch,
+                name=raport_name + str(np.random.randint(0, 10 ** 7)) + ".pickle")
 
 
 if __name__ == '__main__':
