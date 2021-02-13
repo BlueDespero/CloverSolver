@@ -61,6 +61,11 @@ def compress_list_of_dicts(list_of_dicts):
     list_of_dicts = []
     for dict_result in new_dict:
         founded = False
+
+        # Extension for old version of dicts
+        if 'algorithm' not in dict_result.keys():
+            dict_result['algorithm'] = "SGA"
+
         for previously_saved_dict in list_of_dicts:
             equivalent_dict = True
             for key in previously_saved_dict.keys():
@@ -127,8 +132,6 @@ def plot_SGA(paths):
             colColours=["palegreen"] * 1,
             cellLoc='center',
             loc='upper right')
-        print(d.keys())
-        break
 
         plt.show()
 
