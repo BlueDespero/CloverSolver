@@ -1,11 +1,12 @@
 import itertools
 import os
 import pickle
-import numpy as np
+import signal
+from sys import exit
 
 from tqdm import tqdm
 
-from genetic.common import lambda_plus_mu, lambda_coma_mu
+from genetic.common import lambda_plus_mu
 from genetic.common import save_raport
 from genetic.plugin_algorithms.crossover import exchange_two_rows_crossover, exchange_two_columns_crossover, \
     exchange_two_boxes_crossover, single_point_crossover, double_point_crossover
@@ -73,8 +74,8 @@ def runsingle(algorithm,
 
 
 def runbatch():
-    path_to_tests = r"C:\Users\user\PycharmProjects\CloverSolver\tests\test_effectiveness"
-    test_names = ["test_inputs30_4x4"]  # You can add multiple file names - all their test cases will be loaded
+    path_to_tests = "test_inputs"
+    test_names = ["test_cases_9_100.pickle"]  # You can add multiple file names - all their test cases will be loaded
 
     algorithm = [SGA]
     initial_population_generation = [uniform_initial_population]
@@ -98,11 +99,6 @@ def runbatch():
                                   mutation_rate, crossover_operator, initial_state, termination_condition,
                                   population_merge_function, iterations, population_size, number_of_children)
 
-    save_raport_path = r"C:\Users\user\PycharmProjects\CloverSolver\tests\test_effectiveness"
-    raport_name = "raport_"
-    raport_batch_max_size = 500
-    raport_iter = 0
-    raport_batch = []
     for test in tqdm(list(test_list)):
         global raport_iter
         global raport_batch
@@ -110,7 +106,8 @@ def runbatch():
         raport = runsingle(*test)
         raport_batch.append(raport)
         if len(raport_batch) >= raport_batch_max_size:
-            save_raport(save_path=save_raport_path, raport=raport_batch, name=raport_name + str(raport_iter) + ".pickle")
+            save_raport(save_path=save_raport_path, raport=raport_batch,
+                        name=raport_name + str(raport_iter) + ".pickle")
             print("Saving batch ", raport_iter)
             raport_iter += 1
             raport_batch = []
@@ -118,5 +115,15 @@ def runbatch():
     save_raport(save_path=save_raport_path, raport=raport_batch, name=raport_name + str(raport_iter) + ".pickle")
 
 
+def keyboardInterruptHandler(signal, frame):
+    print("Keyboard interrupt save")
+    save_raport(save_path=save_raport_path, raport=raport_batch,
+                name=raport_name + str(raport_iter) + "_interrupted" + ".pickle")
+    exit(-1)
+
+
 if __name__ == '__main__':
+    signal.signal(signal.SIGINT,
+                  keyboardInterruptHandler)  # To make it work in PyCharm select 'Emulate terminal in output console'.
+    # You will find this option in settings menu in 'Run' section (next to 'Git' section)
     runbatch()
