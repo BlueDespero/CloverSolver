@@ -119,6 +119,9 @@ def keyboardInterruptHandler(signal, frame):
                 name=raport_name + str(raport_iter) + "_interrupted" + ".pickle")
     exit(-1)
 
+
 if __name__ == '__main__':
-    signal.signal(signal.SIGINT, keyboardInterruptHandler)
+    signal.signal(signal.SIGINT,
+                  keyboardInterruptHandler)  # To make it work in PyCharm select 'Emulate terminal in output console'.
+                                            # You will find this option in settings menu in 'Run' section (next to 'Git' section)
     runbatch()
