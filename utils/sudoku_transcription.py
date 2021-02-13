@@ -139,6 +139,32 @@ def sudoku_solution_checker(coordinates, chromosome):
     return True
 
 
+def difficult_sudoku_generator(size=9):
+    if int(np.sqrt(size)) % 1 != 0:
+        print("Not valid size!")
+        return False
+
+    last_grid = np.zeros([size, size])
+
+    basic_coordinates, transcription_matrix = sudoku_matrix_representation(last_grid)
+    basic_solution = np.array(algorithm_x_first_solution(transcription_matrix))
+    np.random.shuffle(basic_solution)
+
+    while True:
+        founded = False
+        for i in range(basic_solution.shape[0]):
+            if not founded:
+                temp_solution = np.hstack([basic_solution[:i], basic_solution[i + 1:]])
+                grid = grid_from_coordinates(temp_solution, basic_coordinates, size_of_grid=size)
+                coordinates, transcription_matrix = sudoku_matrix_representation(grid)
+                sol = algorithm_x(transcription_matrix)
+                if len(sol) == 1:
+                    founded = True
+                    basic_solution = temp_solution
+        if not founded:
+            return grid_from_coordinates(basic_solution, basic_coordinates, size_of_grid=size).astype(int)
+
+
 def sudoku_generator(size=9):
     if int(np.sqrt(size)) % 1 != 0:
         print("Not valid size!")
@@ -158,7 +184,7 @@ def sudoku_generator(size=9):
         coordinates, transcription_matrix = sudoku_matrix_representation(grid)
         if len(algorithm_x(transcription_matrix)) > 1:
             break
-    return last_grid
+    return last_grid.astype(int)
 
 
 def transcription_matrix_from_partial_solution(chromosome, transcription_matrix):

@@ -15,13 +15,14 @@ def remove_intersections(sets, sets_ids, selected_rows, id):
     return sets_c, d_c
 
 
-def algorithm_x_first_solution(given_matrix):
-    order = np.arange(given_matrix.shape[0])
-    np.random.shuffle(order)
-
-    def sub_alg(sets, original_indexes):
+def algorithm_x_first_solution(given_matrix, randomized=True):
+    def sub_alg(sets, original_indexes, randomized):
         if sets.shape == (0, 0):
             return [-1]
+
+        if randomized:
+            # Sort columns by number of ones
+            sets = (sets.T[np.argsort(sets.sum(axis=0))]).T
 
         rows = sets[sets[:, 0] == 1]
         objective_row_numbers = original_indexes[sets[:, 0] == 1]
@@ -32,7 +33,7 @@ def algorithm_x_first_solution(given_matrix):
         for i, objective_row_number in zip(range(rows.shape[0]), objective_row_numbers):
             sets_c, new_indexes = remove_intersections(sets, original_indexes, rows, i)
 
-            previous_solution = sub_alg(sets_c, new_indexes)
+            previous_solution = sub_alg(sets_c, new_indexes, randomized)
 
             if previous_solution == [-1]:
                 return [objective_row_number]
@@ -41,7 +42,12 @@ def algorithm_x_first_solution(given_matrix):
                 return previous_solution + [objective_row_number]
         return previous_solution
 
-    return sub_alg(given_matrix[order], np.arange(given_matrix.shape[0])[order])
+    if randomized:
+        order = np.arange(given_matrix.shape[0])
+        np.random.shuffle(order)
+        return sub_alg(given_matrix[order], np.arange(given_matrix.shape[0])[order], randomized)
+    else:
+        return sub_alg(given_matrix, np.arange(given_matrix.shape[0]), randomized)
 
 
 def algorithm_x(given_matrix):

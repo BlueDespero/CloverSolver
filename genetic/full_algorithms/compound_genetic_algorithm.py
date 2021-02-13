@@ -143,7 +143,7 @@ def plot_CEA_solution(transcription_matrix, size_of_population,
 
     N = np.arange(chromosome_fitness_tracking.shape[1])
     fig, axs = plt.subplots(2, sharex=True)
-    fig.suptitle('Progressive evolutionary algorithm')
+    fig.suptitle('Compound evolutionary algorithm')
     axs[0].set_title('Fitness value')
     axs[1].set_title('Number of covered squares')
     for line1, line2 in zip(chromosome_fitness_tracking, number_of_ones_tracking):
