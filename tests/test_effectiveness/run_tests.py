@@ -1,17 +1,27 @@
 import itertools
 import os
 import pickle
+import signal
+from sys import exit
 
 from tqdm import tqdm
 
-from genetic.common import lambda_plus_mu
+from genetic.common import lambda_plus_mu, lambda_coma_mu
 from genetic.common import save_raport
-from genetic.plugin_algorithms.crossover import exchange_two_rows_crossover
-from genetic.plugin_algorithms.fitness import quadratic_fitness
+from genetic.plugin_algorithms.crossover import exchange_two_rows_crossover, exchange_two_columns_crossover, \
+    exchange_two_boxes_crossover, single_point_crossover, double_point_crossover
+from genetic.plugin_algorithms.fitness import quadratic_fitness, linear_fitness
 from genetic.plugin_algorithms.ga_base import SGA
 from genetic.plugin_algorithms.initial_pop import uniform_initial_population
-from genetic.plugin_algorithms.mutation import shuffle_column_mutation
+from genetic.plugin_algorithms.mutation import shuffle_column_mutation, shuffle_box_mutation, shuffle_row_mutation, \
+    reverse_bit_mutation
 from tests.test_common import default_termination_condition
+
+save_raport_path = "results"
+raport_name = "raport_"
+raport_batch_max_size = 100
+raport_iter = 0
+raport_batch = []
 
 
 def runsingle(algorithm,
@@ -88,22 +98,27 @@ def runbatch():
                                   mutation_rate, crossover_operator, initial_state, termination_condition,
                                   population_merge_function, iterations, population_size, number_of_children)
 
-    save_raport_path = "results"
-    raport_name = "raport_"
-    raport_batch_max_size = 100
-    raport_iter = 0
-    raport_batch = []
+    for test in tqdm(list(test_list)):
+        global raport_iter
+        global raport_batch
 
-    for test in tqdm(test_list):
         raport = runsingle(*test)
         raport_batch.append(raport)
         if len(raport_batch) >= raport_batch_max_size:
-            save_raport(save_path=save_raport_path, raport=raport_batch, name=raport_name + raport_iter)
+            save_raport(save_path=save_raport_path, raport=raport_batch, name=raport_name + str(raport_iter))
+            print("Saving batch ", raport_iter)
             raport_iter += 1
             raport_batch = []
 
     save_raport(save_path=save_raport_path, raport=raport_batch, name=raport_name + str(raport_iter) + ".pickle")
 
 
+def keyboardInterruptHandler(signal, frame):
+    print("Keyboard interrupt save")
+    save_raport(save_path=save_raport_path, raport=raport_batch,
+                name=raport_name + str(raport_iter) + "_interrupted" + ".pickle")
+    exit(-1)
+
 if __name__ == '__main__':
+    signal.signal(signal.SIGINT, keyboardInterruptHandler)
     runbatch()
