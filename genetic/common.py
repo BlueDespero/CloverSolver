@@ -1,8 +1,5 @@
-import logging
 import os
 import pickle
-
-from pathlib import Path
 
 import numpy as np
 
@@ -74,6 +71,7 @@ def classic_representation_sudoku_into_full_chromosome(sudoku):
             chromosome[index] = 1
     return chromosome.astype(int)
 
+
 # TODO create logging
 '''
 def get_log_dir_path():
@@ -117,3 +115,11 @@ def save_raport(save_path, raport, name=None):
     if not name:
         name = find_name()
     pickle.dump(raport, open(os.path.join(save_path, name), "wb"))
+
+
+def print_current_results(iteration, best_solution, best_solution_fitness, population, population_fitness):
+    print("Iteration {} results".format(iteration))
+    print("Best solution {s}  |  Best fitness {f}".format(s=best_solution, f=best_solution_fitness))
+    for j, p in enumerate(population):
+        print("    {iter}: solution {s} | fitness {f}".format(iter=iteration, s=p, f=population_fitness[j]))
+    print("############################")

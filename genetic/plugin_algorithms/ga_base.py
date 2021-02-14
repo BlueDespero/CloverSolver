@@ -1,6 +1,7 @@
 import numpy as np
 
-from genetic.common import sort_population_by_fitness, roulette_wheel_selection, sudoku_full_constraints_set, cube
+from genetic.common import sort_population_by_fitness, roulette_wheel_selection, sudoku_full_constraints_set, cube, \
+    print_current_results
 from genetic.plugin_algorithms.crossover import crossover_population
 from genetic.plugin_algorithms.fitness import get_population_fitness
 from genetic.plugin_algorithms.mutation import mutate_population
@@ -57,22 +58,16 @@ def SGA(initial_population_generation,
             best_solution_fitness = population_fitness[0]
             best_solution = population[0]
 
-        # TODO: make this log into a function and use logger
         if lookup and lookup_every != 0 and i % lookup_every == 0:
-            print("Iteration {} results".format(i))
-            print("Best solution {s}  |  Best fitness {f}".format(s=best_solution, f=best_solution_fitness))
-            for j in range(1, lookup_top + 1):
-                print("    {iter}: solution {s} | fitness {f}".format(iter=i, s=population[j], f=population_fitness[j]))
-            print("############################")
+            print_current_results(iteration=i, best_solution=best_solution, best_solution_fitness=best_solution_fitness,
+                                  population=population[:lookup_top],
+                                  population_fitness=population_fitness[:lookup_top])
 
         if termination_condition(population_fitness):
             break
 
     if lookup:
-        print("Iteration {} results".format(i))
-        print("Best solution {s}  |  Best fitness {f}".format(s=best_solution, f=best_solution_fitness))
-        for j in range(1, lookup_top + 1):
-            print("    {iter}: solution {s} | fitness {f}".format(iter=i, s=population[j], f=population_fitness[j]))
-        print("############################")
+        print_current_results(iteration=i, best_solution=best_solution, best_solution_fitness=best_solution_fitness,
+                              population=population[:lookup_top], population_fitness=population_fitness[:lookup_top])
 
     return best_solution, best_solution_fitness, fitness_record
