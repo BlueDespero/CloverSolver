@@ -123,10 +123,12 @@ def runbatch():
                 processes.append(p)
 
         if len(raport_batch[0]) >= raport_batch_max_size:
+            for p in processes:
+                p.join()
             save_raport(save_path=save_raport_path, raport=list(to_save), name=raport_name + str(raport_iter))
             print("Saving batch ", raport_iter)
             raport_iter += 1
-            raport_batch[0].clear()
+            raport_batch[0] = manager.list()
 
     for p in processes:
         p.join()
