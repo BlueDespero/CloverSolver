@@ -2,6 +2,7 @@ import itertools
 import multiprocessing
 import os
 import pickle
+import random
 import signal
 from sys import exit
 
@@ -99,16 +100,17 @@ def runbatch():
         test_path = os.path.join(path_to_tests, name)
         initial_state += pickle.load(open(test_path, "rb"))
 
-    test_list = itertools.product(algorithm, initial_population_generation, fitness_function, mutation_operator,
+    test_list = list(itertools.product(algorithm, initial_population_generation, fitness_function, mutation_operator,
                                   mutation_rate, crossover_operator, initial_state, termination_condition,
                                   population_merge_function, iterations, population_size, number_of_children,
-                                  raport_batch)
+                                  raport_batch))
+    random.shuffle(test_list)
 
     processes = []
     max_processes_number = 8
     global raport_iter
 
-    for test in tqdm(list(test_list)):
+    for test in tqdm(test_list):
         global to_save
         to_save = raport_batch[0]
 
@@ -120,11 +122,11 @@ def runbatch():
                 p.start()
                 processes.append(p)
 
-        if len(raport_batch) >= raport_batch_max_size:
+        if len(raport_batch[0]) >= raport_batch_max_size:
             save_raport(save_path=save_raport_path, raport=list(to_save), name=raport_name + str(raport_iter))
             print("Saving batch ", raport_iter)
             raport_iter += 1
-            raport_batch.clear()
+            raport_batch[0].clear()
 
     for p in processes:
         p.join()
