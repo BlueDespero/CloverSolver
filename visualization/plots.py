@@ -1,11 +1,49 @@
-import pickle
-
-import dash_core_components as dcc
-import dash_html_components as html
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import plotly.express as px
+import dash_core_components as dcc
+import dash_html_components as html
+from tests.test_effectiveness.run_tests import runsingle
+
+from genetic.common import lambda_plus_mu, lambda_coma_mu
+from genetic.plugin_algorithms.crossover import exchange_two_rows_crossover, exchange_two_columns_crossover, \
+    exchange_two_boxes_crossover, single_point_crossover, double_point_crossover
+from genetic.plugin_algorithms.fitness import quadratic_fitness, linear_fitness
+from genetic.plugin_algorithms.ga_base import SGA
+from genetic.plugin_algorithms.initial_pop import uniform_initial_population
+from genetic.plugin_algorithms.mutation import shuffle_column_mutation, shuffle_row_mutation, shuffle_box_mutation, \
+    reverse_bit_mutation
+from tests.test_common import default_termination_condition
+
+
+def translate_operator(name):
+    d = {"exchange_two_rows_crossover": exchange_two_rows_crossover,
+         "exchange_two_columns_crossover": exchange_two_columns_crossover,
+         "exchange_two_boxes_crossover": exchange_two_boxes_crossover,
+         "single_point_crossover": single_point_crossover,
+         "double_point_crossover": double_point_crossover,
+
+         "quadratic_fitness": quadratic_fitness,
+         "linear_fitness": linear_fitness,
+
+         "SGA": SGA,
+
+         "uniform_initial_population": uniform_initial_population,
+
+         "shuffle_column_mutation": shuffle_column_mutation,
+         "shuffle_row_mutation": shuffle_row_mutation,
+         "shuffle_box_mutation": shuffle_box_mutation,
+         "reverse_bit_mutation": reverse_bit_mutation,
+
+         "default_termination_condition": default_termination_condition,
+
+         "lambda_plus_mu": lambda_plus_mu,
+         "lambda_coma_mu": lambda_coma_mu
+         }
+    return d[name]
+
+
 from dash.dependencies import Input, Output
 from jupyter_dash import JupyterDash
 
@@ -211,7 +249,7 @@ def visualize(df):
         return px.scatter(
             stretch_df(filtered_df), range_y=[0, 200],
             x="Iteration", y='result', color=stretch_df(filtered_df)["record_type"],
-            render_mode="webgl",
+            render_mode="webgl", title="Best fitness:" + str(filtered_df["best_fitness"].iloc[0]),
             labels={'worst_record': "Worst record", 'best_record': "Best record", 'mean_record': "Mean record"}
         )
 
@@ -223,7 +261,7 @@ def fill(arr, expected_length):
     return np.hstack([arr, np.zeros(expected_length - arr.shape[0])])
 
 
-def compress_from_file(path):
+def compress_from_file(path=None, l=None):
     # compress dicts with equal parameters from a file to few distinct dicts
     # Results are also compressed, by taking its mean
     infile = open(path, "rb")
