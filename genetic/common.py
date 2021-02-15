@@ -1,8 +1,5 @@
-import logging
 import os
 import pickle
-
-from pathlib import Path
 
 import numpy as np
 
@@ -73,6 +70,7 @@ def classic_representation_sudoku_into_full_chromosome(sudoku):
             index = int((i * sudoku.shape[0]) + (value - 1))
             chromosome[index] = 1
     return chromosome.astype(int)
+
 
 # TODO create logging
 '''
