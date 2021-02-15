@@ -1,7 +1,3 @@
-import pickle
-
-import dash_core_components as dcc
-import dash_html_components as html
 import matplotlib.pyplot as plt
 import numpy as np
 import pickle
@@ -9,9 +5,6 @@ import pandas as pd
 import plotly.express as px
 import dash_core_components as dcc
 import dash_html_components as html
-from pathlib import Path
-from jupyter_dash import JupyterDash
-from dash.dependencies import Input, Output
 from tests.test_effectiveness.run_tests import runsingle
 
 from genetic.common import lambda_plus_mu, lambda_coma_mu
@@ -47,9 +40,11 @@ def translate_operator(name):
          "default_termination_condition": default_termination_condition,
 
          "lambda_plus_mu": lambda_plus_mu,
-         "lambda_coma_mu":lambda_coma_mu
+         "lambda_coma_mu": lambda_coma_mu
          }
     return d[name]
+
+
 from dash.dependencies import Input, Output
 from jupyter_dash import JupyterDash
 
@@ -271,7 +266,7 @@ def visualize(df):
         return px.scatter(
             stretch_df(filtered_df), range_y=[0, 200],
             x="Iteration", y='result', color=stretch_df(filtered_df)["record_type"],
-            render_mode="webgl",title="Best fitness:"+str(filtered_df["best_fitness"].iloc[0]),
+            render_mode="webgl", title="Best fitness:" + str(filtered_df["best_fitness"].iloc[0]),
             labels={'worst_record': "Worst record", 'best_record': "Best record", 'mean_record': "Mean record"}
         )
 
@@ -283,7 +278,7 @@ def fill(arr, expected_length):
     return np.hstack([arr, np.zeros(expected_length - arr.shape[0])])
 
 
-def compress_from_file(path=None,l=None):
+def compress_from_file(path=None, l=None):
     # compress dicts with equal parameters from a file to few distinct dicts
     # Results are also compressed, by taking its mean
     if l:
