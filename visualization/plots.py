@@ -258,6 +258,8 @@ def compress_from_file(path):
                  fill(np.array(dict_result['fitness_record'])[:, 2], int(dict_result['iterations']))])
 
         else:
+            if 'algorithm' not in dict_result.keys():
+                dict_result['algorithm'] = 'SGA'
             dict_result['best_fitness'] = [dict_result['best_fitness']]
             dict_result['worst_record'] = fill(np.array(dict_result['fitness_record'])[:, 0],
                                                int(dict_result['iterations']))
@@ -439,5 +441,7 @@ def visualize_SGA(pathlist):
     l_of_dfs = [dict_to_df(d) for d in l]
 
     df = compress_list_of_df(l_of_dfs)
-
-    visualize(df)
+    if df.empty:
+        print("All files are empty.")
+    else:
+        visualize(df)
