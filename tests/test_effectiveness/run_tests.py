@@ -10,13 +10,11 @@ from tqdm import tqdm
 
 from genetic.common import lambda_plus_mu
 from genetic.common import save_raport
-from genetic.plugin_algorithms.crossover import exchange_two_rows_crossover, exchange_two_columns_crossover, \
-    exchange_two_boxes_crossover, single_point_crossover, double_point_crossover
-from genetic.plugin_algorithms.fitness import quadratic_fitness, linear_fitness
+from genetic.plugin_algorithms.crossover import exchange_two_rows_crossover
+from genetic.plugin_algorithms.fitness import quadratic_fitness
 from genetic.plugin_algorithms.ga_base import SGA
 from genetic.plugin_algorithms.initial_pop import uniform_initial_population
-from genetic.plugin_algorithms.mutation import shuffle_column_mutation, shuffle_row_mutation, shuffle_box_mutation, \
-    reverse_bit_mutation
+from genetic.plugin_algorithms.mutation import shuffle_column_mutation
 from tests.test_common import default_termination_condition
 
 save_raport_path = "results"
@@ -101,9 +99,9 @@ def runbatch():
         initial_state += pickle.load(open(test_path, "rb"))
 
     test_list = list(itertools.product(algorithm, initial_population_generation, fitness_function, mutation_operator,
-                                  mutation_rate, crossover_operator, initial_state, termination_condition,
-                                  population_merge_function, iterations, population_size, number_of_children,
-                                  raport_batch))
+                                       mutation_rate, crossover_operator, initial_state, termination_condition,
+                                       population_merge_function, iterations, population_size, number_of_children,
+                                       raport_batch))
     random.shuffle(test_list)
 
     processes = []

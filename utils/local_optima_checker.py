@@ -1,10 +1,6 @@
-import numpy as np
-import matplotlib.pyplot as plt
-from tqdm.auto import tqdm
 from scipy.special import binom
-from time import time
+from tqdm.auto import tqdm
 
-from utils.sudoku_transcription import *
 from utils.algorithm_x import remove_intersections
 from utils.common import *
 

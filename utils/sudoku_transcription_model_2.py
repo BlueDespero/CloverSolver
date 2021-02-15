@@ -1,9 +1,6 @@
-import numpy as np
-from tqdm.auto import tqdm
-
-from utils.sudoku_transcription import *
-from utils.algorithm_x import algorithm_x_first_solution, algorithm_x, remove_intersections
+from utils.algorithm_x import remove_intersections
 from utils.common import ids_to_binary_list, binary_list_to_ids
+from utils.sudoku_transcription import *
 
 
 def sudoku_matrix_representation2(grid):

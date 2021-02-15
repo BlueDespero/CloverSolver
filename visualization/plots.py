@@ -1,13 +1,13 @@
-import matplotlib.pyplot as plt
-import numpy as np
 import pickle
-from pathlib import Path
-from jupyter_dash import JupyterDash
-from dash.dependencies import Input, Output
-import pandas as pd
-import plotly.express as px
+
 import dash_core_components as dcc
 import dash_html_components as html
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import plotly.express as px
+from dash.dependencies import Input, Output
+from jupyter_dash import JupyterDash
 
 
 def visualize(df):
