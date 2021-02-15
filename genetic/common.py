@@ -72,39 +72,6 @@ def classic_representation_sudoku_into_full_chromosome(sudoku):
     return chromosome.astype(int)
 
 
-# TODO create logging
-'''
-def get_log_dir_path():
-    curr = os.getcwd()
-    while not "log" in os.listdir()
-
-def setup_logger(log_name="execution.log"):
-    log_path = Path(os.getcwd().)
-
-    logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
-    rootLogger = logging.getLogger()
-
-    fileHandler = logging.FileHandler(data_path / log_name)
-    fileHandler.setFormatter(logFormatter)
-    rootLogger.addHandler(fileHandler)
-
-    consoleHandler = logging.StreamHandler()
-    consoleHandler.setFormatter(logFormatter)
-    rootLogger.addHandler(consoleHandler)
-
-    return rootLogger
-
-
-def log_progress(iteration, best_solution, best_solution_fitness, population=[], population_fitness=[], logger=None):
-    if not logger:
-        logger = setup_logger()
-    logger.info("Iteration {} results".format(iteration))
-    logger.info("Best solution {s}  |  Best fitness {f}".format(s=best_solution, f=best_solution_fitness))
-    for j, p in enumerate(population):
-        logger.info("    {iter}: solution {s} | fitness {f}".format(iter=iteration, s=p, f=population_fitness[j]))
-'''
-
-
 def save_raport(save_path, raport, name=None):
     def find_name():
         raport_ids = [int(file.split("_")[1].split(".")[0]) for file in os.listdir(save_path) if
