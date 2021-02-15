@@ -1,0 +1,4 @@
+ddt==1.4.1
+numpy==1.19.5
+tqdm==4.56.0
+matplotlib==3.3.3
