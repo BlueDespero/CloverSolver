@@ -6,14 +6,11 @@ from genetic.common import classic_representation_sudoku_into_full_chromosome
 from utils.sudoku_transcription import sudoku_generator
 
 
-def generate_inputs(name, path, num_cases, size=9, unique=True, sudoku_generating_method=sudoku_generator):
-    # TODO make name not requered, but generic and generated based on the path directory contents
-
+def generate_inputs(name, path, num_cases, size=9, sudoku_generating_method=sudoku_generator):
     generated_cases = []
     while len(generated_cases) < num_cases:
         case = sudoku_generating_method(size)
         case = classic_representation_sudoku_into_full_chromosome(case)
-        # TODO add unique filtering
         generated_cases.append(case)
 
     pickle.dump(generated_cases, open(os.path.join(path, name), "wb"))
@@ -41,4 +38,4 @@ if __name__ == '__main__':
         print("File with this name already exist!")
         exit(1)
 
-    generate_inputs(args.name, args.path, args.count, args.size, args.unique)
+    generate_inputs(args.name, args.path, args.count, args.size)

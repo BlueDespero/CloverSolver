@@ -115,6 +115,4 @@ def local_minima_counter(given_matrix):
 
 
 def solution_tree(tree_matrix, coordinates):
-    # TODO Sudoku solving can be represented as a decision tree, which shows difficulty level of its - this function
-    #  will do this.
     return None
