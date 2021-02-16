@@ -1,14 +1,11 @@
-import matplotlib.pyplot as plt
-import numpy as np
 import pickle
-import pandas as pd
-import plotly.express as px
+
 import dash_core_components as dcc
 import dash_html_components as html
-from pathlib import Path
-from jupyter_dash import JupyterDash
-from dash.dependencies import Input, Output
-from tests.test_effectiveness.run_tests import runsingle
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import plotly.express as px
 
 from genetic.common import lambda_plus_mu, lambda_coma_mu
 from genetic.plugin_algorithms.crossover import exchange_two_rows_crossover, exchange_two_columns_crossover, \
@@ -19,6 +16,7 @@ from genetic.plugin_algorithms.initial_pop import uniform_initial_population
 from genetic.plugin_algorithms.mutation import shuffle_column_mutation, shuffle_row_mutation, shuffle_box_mutation, \
     reverse_bit_mutation
 from tests.test_common import default_termination_condition
+from tests.test_effectiveness.run_tests import runsingle
 
 
 def visualize_with_real_time_computation():
@@ -271,6 +269,10 @@ def translate_operator(name):
          "lambda_coma_mu": lambda_coma_mu
          }
     return d[name]
+
+
+from dash.dependencies import Input, Output
+from jupyter_dash import JupyterDash
 
 
 def visualize(df):
