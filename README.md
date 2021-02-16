@@ -41,7 +41,7 @@ Clover solver comes with tools for sudoku solving with genetic algorithms.
 
 To generate testing examples which can be used with main.py script you can use generate_test_inputs.py. Example:
 
-`python3 utils/generate_test_inputs.py -c 100 -p ./test_cases_4_100.pickle -s 4
+`python3 tools/generate_test_inputs.py -c 100 -p ./test_cases_4_100.pickle -s 4
 `
 
 Which will generate a pickle file _test_cases_4_100.pickle_ at current location with binary
@@ -53,5 +53,5 @@ Results of main.py or inputs generated with generate_test_inputs.py can be check
 Example:
 
 `
-python3 utils/lookup_pickle.py -p tests/test_effectiveness/results/test_cases_4_100.pickle
+python3 tools/lookup_pickle.py -p tests/test_effectiveness/results/test_cases_4_100.pickle
 `
