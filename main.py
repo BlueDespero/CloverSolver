@@ -189,7 +189,11 @@ translate_mutation = {
 }
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter,
+                                     epilog="Example:\n"
+                                            "python3 main.py -p ./test_input.pickle -r ./test_result.pickle --crossover sp dp --lambda-function coma plus --print-results --checkpoints 20 ",
+                                     description="Script trying to solve sudokus given as input with genetic algorithm.\n"
+                                                 "You can choose multiple options of each parameter, script will try every possible combination of your selected parameters for every sudoku in the input file.")
     parser.add_argument('-p', '--input-path', required=True, nargs='+',
                         help="Path to sudoku representations, algorithm inputs.")
     parser.add_argument('-r', '--result-path', required=True, help="Result save path")
@@ -226,7 +230,7 @@ if __name__ == '__main__':
                         help="Set if you want to print results after script is finished.")
     parser.add_argument('--checkpoints', type=int, default=0,
                         help="Set if you want to save your progress. "
-                             "Results will be saved every x tests, where x is the valueset here")
+                             "Results will be saved every x tests, where x is the value set here")
 
     args = parser.parse_args()
 
