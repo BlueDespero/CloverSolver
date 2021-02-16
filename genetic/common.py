@@ -106,12 +106,8 @@ def log_progress(iteration, best_solution, best_solution_fitness, population=[],
 
 
 def save_raport(save_path, raport, name=None):
-    def find_name():
-        raport_ids = [int(file.split("_")[1].split(".")[0]) for file in os.listdir(save_path) if
-                      file.startswith("raport_")]
-        next_id = max(raport_ids) if raport_ids else 0
-        return "raport_{}.pickle".format(next_id)
-
     if not name:
-        name = find_name()
-    pickle.dump(raport, open(os.path.join(save_path, name), "wb"))
+        pickle.dump(raport, open(save_path, "wb"))
+    else:
+        pickle.dump(raport, open(os.path.join(save_path, name), "wb"))
+

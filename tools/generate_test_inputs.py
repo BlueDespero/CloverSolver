@@ -6,7 +6,7 @@ from genetic.common import classic_representation_sudoku_into_full_chromosome
 from utils.sudoku_transcription import sudoku_generator
 
 
-def generate_inputs(name, path, num_cases, size=9, unique=True, sudoku_generating_method=sudoku_generator):
+def generate_inputs(name, path, num_cases, size=9, sudoku_generating_method=sudoku_generator):
     # TODO make name not requered, but generic and generated based on the path directory contents
 
     generated_cases = []
@@ -28,7 +28,6 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--path', required=True,
                         help="Path to the directory where result should be saved(absolute or relative to generate_test_inputs.py file)")
     parser.add_argument('-s', '--size', type=int, default=9, help="Generated sudoku side size")
-    parser.add_argument('-u', '--unique', type=bool, default=True, help="Should we only saving unique tests?")
 
     args = parser.parse_args()
 
@@ -41,4 +40,4 @@ if __name__ == '__main__':
         print("File with this name already exist!")
         exit(1)
 
-    generate_inputs(args.name, args.path, args.count, args.size, args.unique)
+    generate_inputs(args.name, args.path, args.count, args.size)
