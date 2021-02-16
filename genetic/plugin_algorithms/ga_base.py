@@ -57,7 +57,6 @@ def SGA(initial_population_generation,
             best_solution_fitness = population_fitness[0]
             best_solution = population[0]
 
-        # TODO: make this log into a function and use logger
         if lookup and lookup_every != 0 and i % lookup_every == 0:
             print("Iteration {} results".format(i))
             print("Best solution {s}  |  Best fitness {f}".format(s=best_solution, f=best_solution_fitness))
