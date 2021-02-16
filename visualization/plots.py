@@ -21,6 +21,231 @@ from genetic.plugin_algorithms.mutation import shuffle_column_mutation, shuffle_
 from tests.test_common import default_termination_condition
 
 
+def visualize_with_real_time_computation():
+    app = JupyterDash(__name__)
+    app.layout = html.Div([
+        dcc.Graph(id='graph'),
+        html.Div([
+            html.Div([
+                html.Label([
+                    "Number of interations",
+                    dcc.Slider(
+                        id="number_of_interations_slider",
+                        min=10,
+                        max=1000,
+                        step=None,
+                        marks={int(val): str(val) for val in (np.arange(17) * 60) + 10},
+                        value=130
+                    )
+                ])
+            ],
+                style={'width': '48%', 'float': 'left', 'display': 'inline-block'}
+            ),
+            html.Div([
+                html.Label([
+                    "Mutatuin rate",
+                    dcc.Slider(
+                        id="mutation_rate_slider",
+                        min=0.1,
+                        max=1.0,
+                        step=None,
+                        marks={float(val): str(val) for val in (np.arange(10) + 1) / 10},
+                        value=0.1
+                    )
+                ])
+            ],
+                style={'width': '48%', 'float': 'right', 'display': 'inline-block'}
+            )
+        ]),
+        html.Div([
+            html.Div([
+                html.Label([
+                    "Number of children",
+                    dcc.Slider(
+                        id="number_of_children_slider",
+                        min=10,
+                        max=250,
+                        step=None,
+                        marks={int(val): str(val) for val in np.arange(13) * 20 + 10},
+                        value=10
+                    )
+                ])
+            ],
+                style={'width': '48%', 'float': 'left', 'display': 'inline-block'}),
+
+            html.Div([
+                html.Label([
+                    "Population size",
+                    dcc.Slider(
+                        id="population_size_slider",
+                        min=10,
+                        max=250,
+                        step=None,
+                        marks={int(val): str(val) for val in np.arange(13) * 20 + 10},
+                        value=10
+                    )
+                ])
+            ],
+                style={'width': '48%', 'float': 'right', 'display': 'inline-block'})
+        ]),
+
+        html.Div([
+            html.Div([
+                html.Label([
+                    "Mutation operator",
+                    dcc.Dropdown(
+                        id="mutation_operator_dropdown",
+                        value='reverse_bit_mutation',
+                        options=[{'label': ''.join(word + ' ' for word in name.split("_")), 'value': name}
+                                 for name in ['shuffle_column_mutation', 'shuffle_box_mutation',
+                                              'shuffle_row_mutation', 'reverse_bit_mutation']
+                                 ],
+                        searchable=False,
+                        clearable=False
+                    )
+                ])
+            ],
+                style={'width': '33.3%', 'float': 'left', 'display': 'inline-block'}),
+
+            html.Div([
+                html.Label([
+                    "Initial population generation",
+                    dcc.Dropdown(
+                        id="initial_population_generation_dropdown",
+                        value="uniform_initial_population",
+                        options=[{'label': ''.join(word + ' ' for word in name.split("_")), 'value': name}
+                                 for name in ["uniform_initial_population"]
+                                 ],
+                        searchable=False,
+                        clearable=False
+                    )
+                ])
+            ],
+                style={'width': '33.3%', 'display': 'inline-block'}),
+
+            html.Div([
+                html.Label([
+                    "Fitness function",
+                    dcc.Dropdown(
+                        id="fitness_function_dropdown",
+                        value="quadratic_fitness",
+                        options=[{'label': ''.join(word + ' ' for word in name.split("_")), 'value': name}
+                                 for name in ["quadratic_fitness", "linear_fitness"]
+                                 ],
+                        searchable=False,
+                        clearable=False
+                    )
+                ])
+            ],
+                style={'width': '33.3%', 'float': 'right', 'display': 'inline-block'})
+        ]),
+
+        html.Div([
+            html.Div([
+                html.Label([
+                    "Crossover operator",
+                    dcc.Dropdown(
+                        id="crossover_operator_dropdown",
+                        value='exchange_two_rows_crossover',
+                        options=[{'label': ''.join(word + ' ' for word in name.split("_")), 'value': name}
+                                 for name in ['exchange_two_rows_crossover', 'double_point_crossover',
+                                              'exchange_two_boxes_crossover', 'single_point_crossover',
+                                              'exchange_two_columns_crossover']
+                                 ],
+                        searchable=False,
+                        clearable=False
+                    )
+                ])
+            ],
+                style={'width': '33.3%', 'float': 'left', 'display': 'inline-block'}),
+            html.Div([
+                html.Label([
+                    "Population merge function",
+                    dcc.Dropdown(
+                        id="population_merge_function_dropdown",
+                        value="lambda_plus_mu",
+                        options=[{'label': ''.join(word + ' ' for word in name.split("_")), 'value': name}
+                                 for name in ["lambda_plus_mu", "lambda_coma_mu"]
+                                 ],
+                        searchable=False,
+                        clearable=False
+                    )
+                ])
+            ],
+                style={'width': '33.3%', 'display': 'inline-block'}),
+            html.Div([
+                html.Label([
+                    "Termination condition",
+                    dcc.Dropdown(
+                        id="termination_condition_dropdown",
+                        value="default_termination_condition",
+                        options=[{'label': ''.join(word + ' ' for word in name.split("_")), 'value': name}
+                                 for name in ["default_termination_condition"]
+                                 ],
+                        searchable=False,
+                        clearable=False
+                    )
+                ])
+            ],
+                style={'width': '33.3%', 'float': 'right', 'display': 'inline-block'})
+        ])
+    ])
+
+    @app.callback(
+        Output('graph', 'figure'),
+        Input("mutation_rate_slider", 'value'),
+        Input("population_size_slider", 'value'),
+        Input("number_of_children_slider", 'value'),
+        Input("number_of_interations_slider", 'value'),
+        Input("mutation_operator_dropdown", 'value'),
+        Input("initial_population_generation_dropdown", 'value'),
+        Input("fitness_function_dropdown", 'value'),
+        Input("crossover_operator_dropdown", 'value'),
+        Input("population_merge_function_dropdown", 'value'),
+        Input("termination_condition_dropdown", 'value'))
+    def update_graph(mutation_val, population_size_val, number_of_children_val,
+                     number_of_interations_val, mutation_operator_name, initial_population_generation_name,
+                     fitness_function_name, crossover_operator_name,
+                     population_merge_function_name, termination_condition_name):
+        algorithm = "SGA"
+        iterations = number_of_interations_val
+        mutation_rate = mutation_val
+        population_size = population_size_val
+        number_of_children = number_of_children_val
+        mutation_operator = mutation_operator_name
+        initial_population_generation = initial_population_generation_name
+        fitness_function = fitness_function_name
+        crossover_operator = crossover_operator_name
+        population_merge_function = population_merge_function_name
+        termination_condition = termination_condition_name
+
+        result = []
+        initial_state = np.array([0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                  0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0])
+
+        runsingle(translate_operator(algorithm), translate_operator(initial_population_generation),
+                  translate_operator(fitness_function), translate_operator(mutation_operator),
+                  float(mutation_rate), translate_operator(crossover_operator),
+                  initial_state, translate_operator(termination_condition),
+                  translate_operator(population_merge_function), int(iterations), int(population_size),
+                  int(number_of_children),
+                  result)
+
+        result = compress_from_file(l=result)
+        filtered_df = stretch_df(dict_to_df(result[0]))
+
+        return px.scatter(
+            filtered_df,
+            x="Iteration", y='result', color=filtered_df["record_type"],
+            render_mode="webgl", title="Best fitness:" + str(np.min(filtered_df["result"])),
+            labels={'worst_record': "Worst record", 'best_record': "Best record", 'mean_record': "Mean record"})
+
+        # Run app and display result inline in the notebook
+
+    app.run_server(mode='inline')
+
+
 def translate_operator(name):
     d = {"exchange_two_rows_crossover": exchange_two_rows_crossover,
          "exchange_two_columns_crossover": exchange_two_columns_crossover,
@@ -43,7 +268,7 @@ def translate_operator(name):
          "default_termination_condition": default_termination_condition,
 
          "lambda_plus_mu": lambda_plus_mu,
-         "lambda_coma_mu":lambda_coma_mu
+         "lambda_coma_mu": lambda_coma_mu
          }
     return d[name]
 
@@ -265,7 +490,7 @@ def visualize(df):
         return px.scatter(
             stretch_df(filtered_df), range_y=[0, 200],
             x="Iteration", y='result', color=stretch_df(filtered_df)["record_type"],
-            render_mode="webgl",title="Best fitness:"+str(filtered_df["best_fitness"].iloc[0]),
+            render_mode="webgl", title="Best fitness:" + str(filtered_df["best_fitness"].iloc[0]),
             labels={'worst_record': "Worst record", 'best_record': "Best record", 'mean_record': "Mean record"}
         )
 
@@ -277,7 +502,7 @@ def fill(arr, expected_length):
     return np.hstack([arr, np.zeros(expected_length - arr.shape[0])])
 
 
-def compress_from_file(path=None,l=None):
+def compress_from_file(path=None, l=None):
     # compress dicts with equal parameters from a file to few distinct dicts
     # Results are also compressed, by taking its mean
     if l:
