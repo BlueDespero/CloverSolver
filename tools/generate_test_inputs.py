@@ -6,7 +6,7 @@ from genetic.common import classic_representation_sudoku_into_full_chromosome
 from utils.sudoku_transcription import sudoku_generator
 
 
-def generate_inputs(name, path, num_cases, size=9, sudoku_generating_method=sudoku_generator):
+def generate_inputs(path, num_cases, size=9, sudoku_generating_method=sudoku_generator):
     # TODO make name not requered, but generic and generated based on the path directory contents
 
     generated_cases = []
@@ -30,4 +30,4 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    generate_inputs(args.name, args.path, args.count, args.size)
+    generate_inputs(args.path, args.count, args.size)
